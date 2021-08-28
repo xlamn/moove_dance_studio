@@ -15,6 +15,7 @@ class AppHeader extends StatelessWidget {
         centerTitle: false,
         titlePadding: EdgeInsets.symmetric(
           vertical: SizeConstants.big,
+          horizontal: SizeConstants.normal,
         ),
         title: Text(
           title,

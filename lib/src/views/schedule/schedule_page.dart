@@ -8,7 +8,6 @@ class SchedulePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: EdgeInsets.symmetric(horizontal: SizeConstants.big),
       child: CustomScrollView(
         slivers: <Widget>[
           AppHeader(
@@ -75,6 +74,8 @@ class SchedulePage extends StatelessWidget {
         padding: EdgeInsets.only(
           bottom: SizeConstants.big,
           top: SizeConstants.mini,
+          left: SizeConstants.normal,
+          right: SizeConstants.normal,
         ),
         child: WeekdaySelector(
           onChanged: (int day) {
@@ -99,6 +100,7 @@ class SchedulePage extends StatelessWidget {
             child: Container(
               padding: EdgeInsets.symmetric(
                 vertical: SizeConstants.large,
+                horizontal: SizeConstants.normal,
               ),
               child: Row(
                 children: [

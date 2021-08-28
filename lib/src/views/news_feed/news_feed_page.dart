@@ -10,9 +10,6 @@ class NewsFeedPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: EdgeInsets.symmetric(
-        horizontal: SizeConstants.big,
-      ),
       child: CustomScrollView(
         slivers: <Widget>[
           AppHeader(
@@ -43,6 +40,7 @@ class NewsFeedPage extends StatelessWidget {
         child: Container(
           padding: EdgeInsets.symmetric(
             vertical: SizeConstants.big,
+            horizontal: SizeConstants.normal,
           ),
           child:
               Row(mainAxisAlignment: MainAxisAlignment.spaceAround, children: [
