@@ -115,7 +115,7 @@ class NewsFeedPage extends StatelessWidget {
       tags: [
         Tag(
           tagText: 'Classes',
-          tagBackgroundColor: Colors.blue,
+          color: Colors.blue,
         )
       ],
     ),
@@ -127,8 +127,7 @@ class NewsFeedPage extends StatelessWidget {
         ),
         Tag(
           tagText: 'WICHTIG',
-          tagBackgroundColor: Colors.red,
-          tagTextColor: Colors.white,
+          color: Colors.red,
         ),
       ],
     ),
@@ -137,7 +136,7 @@ class NewsFeedPage extends StatelessWidget {
       tags: [
         Tag(
           tagText: 'Classes',
-          tagBackgroundColor: Colors.blue,
+          color: Colors.blue,
         ),
       ],
     ),
@@ -146,7 +145,7 @@ class NewsFeedPage extends StatelessWidget {
       tags: [
         Tag(
           tagText: 'Merchandise',
-          tagBackgroundColor: Colors.green.withOpacity(0.8),
+          color: Colors.green,
         )
       ],
     ),

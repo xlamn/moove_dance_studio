@@ -3,24 +3,38 @@ import 'package:moove_dance_studio/moove_dance_studio.dart';
 
 class Tag extends StatelessWidget {
   final String tagText;
-  final Color tagTextColor;
-  final Color tagBackgroundColor;
+  final Color? color;
 
-  Tag(
-      {required this.tagText,
-      this.tagTextColor = Colors.black,
-      this.tagBackgroundColor = Colors.white});
+  Tag({
+    required this.tagText,
+    this.color = Colors.orange,
+  });
 
   @override
   Widget build(BuildContext context) {
-    return Material(
-      child: Container(
-        padding: EdgeInsets.symmetric(
-            horizontal: SizeConstants.small, vertical: SizeConstants.mini),
-        color: tagBackgroundColor,
-        child: Text(
-          tagText,
-          style: TextStyle(color: tagTextColor),
+    return Container(
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.all(
+          Radius.circular(20),
+        ),
+        color: color?.withOpacity(0.2) ??
+            Theme.of(context).primaryColor.withOpacity(0.2),
+        boxShadow: [
+          BoxShadow(
+            color: Theme.of(context).primaryColor.withOpacity(0.2),
+            spreadRadius: 0.25,
+            blurRadius: 5.0,
+          ),
+        ],
+      ),
+      padding: EdgeInsets.symmetric(
+        horizontal: SizeConstants.normal,
+        vertical: SizeConstants.small,
+      ),
+      child: Text(
+        tagText,
+        style: TextStyle(
+          color: color ?? Theme.of(context).textTheme.bodyText1!.color,
         ),
       ),
     );
@@ -35,44 +49,53 @@ class DanceClassLevelTag extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     var tagText;
-    var tagTextColor;
-    var tagBackgroundColor;
+    var tagColor;
 
     switch (danceClass.level) {
       case (DanceClassLevel.beginner):
         tagText = 'beginner'.toUpperCase();
-        tagTextColor = Colors.black;
-        tagBackgroundColor = Colors.white;
+        tagColor = Colors.blue;
         break;
       case (DanceClassLevel.starter):
         tagText = 'starter'.toUpperCase();
-        tagTextColor = Colors.white;
-        tagBackgroundColor = Colors.green;
+        tagColor = Colors.green;
         break;
       case (DanceClassLevel.intermediate):
         tagText = 'intermediate'.toUpperCase();
-        tagTextColor = Colors.white;
-        tagBackgroundColor = Colors.black54;
+        tagColor = Colors.orange;
         break;
       case (DanceClassLevel.masterclass):
         tagText = 'masterclass'.toUpperCase();
-        tagTextColor = Colors.white;
-        tagBackgroundColor = Colors.red;
+        tagColor = Colors.red;
         break;
       default:
         tagText = '';
-        tagTextColor = Colors.white;
-        tagBackgroundColor = Colors.black;
+        tagColor = Colors.black;
     }
 
-    return Material(
-      child: Container(
-        padding: EdgeInsets.symmetric(
-            horizontal: SizeConstants.small, vertical: SizeConstants.mini),
-        color: tagBackgroundColor,
-        child: Text(
-          tagText,
-          style: TextStyle(color: tagTextColor, fontSize: 16.0),
+    return Container(
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.all(
+          Radius.circular(20),
+        ),
+        color: tagColor?.withOpacity(0.2) ??
+            Theme.of(context).primaryColor.withOpacity(0.2),
+        boxShadow: [
+          BoxShadow(
+            color: Theme.of(context).primaryColor.withOpacity(0.2),
+            spreadRadius: 0.25,
+            blurRadius: 5.0,
+          ),
+        ],
+      ),
+      padding: EdgeInsets.symmetric(
+        horizontal: SizeConstants.normal,
+        vertical: SizeConstants.small,
+      ),
+      child: Text(
+        tagText,
+        style: TextStyle(
+          color: tagColor ?? Theme.of(context).textTheme.bodyText1!.color,
         ),
       ),
     );
