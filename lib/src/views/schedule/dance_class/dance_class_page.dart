@@ -14,7 +14,7 @@ class DanceClassPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       body: CustomScrollView(
-        //physics: NeverScrollableScrollPhysics(),
+        physics: NeverScrollableScrollPhysics(),
         slivers: [
           SliverToBoxAdapter(
             child: Stack(
@@ -30,7 +30,7 @@ class DanceClassPage extends StatelessWidget {
                   },
                   blendMode: BlendMode.dstIn,
                   child: Container(
-                    height: MediaQuery.of(context).size.height * 0.6,
+                    height: MediaQuery.of(context).size.height * 0.5,
                     decoration: BoxDecoration(
                       gradient: LinearGradient(
                         begin: Alignment.center,
@@ -38,7 +38,7 @@ class DanceClassPage extends StatelessWidget {
                         colors: [Colors.black, Colors.transparent],
                       ),
                       image: DecorationImage(
-                        image: danceClass.teacherImage,
+                        image: AssetImage('assets/headers/header.jpg'),
                         fit: BoxFit.cover,
                       ),
                     ),
@@ -62,7 +62,7 @@ class DanceClassPage extends StatelessWidget {
                     ),
                     Container(
                       padding:
-                          EdgeInsets.symmetric(vertical: SizeConstants.large),
+                          EdgeInsets.symmetric(vertical: SizeConstants.small),
                       child: Text(
                         danceClass.typeOfClass.toUpperCase(),
                         style: TextStyle(
@@ -71,63 +71,103 @@ class DanceClassPage extends StatelessWidget {
                         ),
                       ),
                     ),
-                    DanceClassLevelTag(
-                      danceClass: danceClass,
-                    ),
-                    SizedBox(
-                      height: 60,
-                    ),
                     Container(
-                      width: MediaQuery.of(context).size.width,
                       padding:
-                          EdgeInsets.symmetric(vertical: SizeConstants.mini),
-                      child: Text(
-                        danceClass.teacherName,
-                        style: TextStyle(
-                          fontSize: 18.0,
-                          fontWeight: FontWeight.w700,
-                        ),
-                      ),
-                    ),
-                    Container(
-                      width: MediaQuery.of(context).size.width,
-                      padding:
-                          EdgeInsets.symmetric(vertical: SizeConstants.mini),
-                      child: Text(
-                        danceClass.time,
-                        style: TextStyle(
-                          fontSize: 14.0,
-                        ),
-                      ),
-                    ),
-                    SizedBox(
-                      height: 85,
-                    ),
-                    Container(
-                      width: MediaQuery.of(context).size.width,
-                      padding: EdgeInsets.symmetric(
-                        vertical: SizeConstants.large,
-                      ),
-                      child: Center(
-                        child: MaterialButton(
-                          height: 45,
-                          elevation: 0,
-                          highlightElevation: 0,
-                          splashColor: Colors.transparent,
-                          child: Text(
-                            'BUCHEN',
-                            style: TextStyle(
-                              fontSize: 16.0,
-                              fontWeight: FontWeight.bold,
-                            ),
-                          ),
-                          onPressed: () {},
-                        ),
+                          EdgeInsets.symmetric(vertical: SizeConstants.small),
+                      child: DanceClassLevelTag(
+                        danceClass: danceClass,
                       ),
                     ),
                   ],
                 )),
           ),
+          SliverToBoxAdapter(
+            child: RoundedContainer(items: [
+              Container(
+                padding: EdgeInsets.symmetric(
+                  vertical: SizeConstants.normal,
+                  horizontal: SizeConstants.normal,
+                ),
+                child: Row(
+                  children: [
+                    Padding(
+                      padding: const EdgeInsets.only(
+                        right: SizeConstants.big,
+                        left: SizeConstants.mini,
+                        top: SizeConstants.mini,
+                        bottom: SizeConstants.mini,
+                      ),
+                      child: Container(
+                        width: 65.0,
+                        height: 65.0,
+                        decoration: BoxDecoration(
+                          image: DecorationImage(
+                            image: danceClass.teacherImage,
+                            fit: BoxFit.cover,
+                          ),
+                          borderRadius: BorderRadius.all(
+                            Radius.circular(50.0),
+                          ),
+                        ),
+                      ),
+                    ),
+                    Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          danceClass.teacherName,
+                          style: TextStyle(
+                            fontSize: 20.0,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                        Container(
+                          padding: EdgeInsets.symmetric(
+                            vertical: SizeConstants.mini,
+                          ),
+                        ),
+                        Text(
+                          danceClass.time,
+                          style: TextStyle(
+                              fontSize: 14.0,
+                              color: Theme.of(context)
+                                  .textTheme
+                                  .bodyText1
+                                  ?.color!
+                                  .withOpacity(0.5)),
+                        ),
+                      ],
+                    ),
+                  ],
+                ),
+              ),
+            ]),
+          ),
+          // SliverToBoxAdapter(
+          //   child: Container(
+          //     width: MediaQuery.of(context).size.width,
+          //     padding: EdgeInsets.symmetric(
+          //       vertical: SizeConstants.large,
+          //     ),
+          //     child: Center(
+          //       child: MaterialButton(
+          //         height: 45,
+          //         elevation: 0,
+          //         highlightElevation: 0,
+          //         splashColor: Colors.transparent,
+          //         child: Text(
+          //           'BUCHEN',
+          //           style: TextStyle(
+          //             fontSize: 16.0,
+          //             fontWeight: FontWeight.bold,
+          //           ),
+          //         ),
+          //         onPressed: () {},
+          //       ),
+          //     ),
+          //   ),
+          // )
         ],
       ),
     );
