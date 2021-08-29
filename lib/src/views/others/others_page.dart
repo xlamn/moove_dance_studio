@@ -25,12 +25,12 @@ class OthersPage extends StatelessWidget {
         SliverToBoxAdapter(
             child: RoundedContainer(
           items: [
-            listItem(
+            _listItem(
               icon: Icon(Icons.location_on_outlined),
               context: context,
               title: 'Location',
             ),
-            listItem(
+            _listItem(
               icon: Icon(Icons.public),
               context: context,
               title: 'Website',
@@ -41,12 +41,12 @@ class OthersPage extends StatelessWidget {
         SliverToBoxAdapter(
             child: RoundedContainer(
           items: [
-            listItem(
+            _listItem(
               icon: Icon(Icons.privacy_tip_outlined),
               context: context,
               title: 'Privacy',
             ),
-            listItem(
+            _listItem(
               icon: Icon(Icons.text_snippet_outlined),
               context: context,
               title: 'User Conditions',
@@ -56,12 +56,12 @@ class OthersPage extends StatelessWidget {
         SliverToBoxAdapter(
             child: RoundedContainer(
           items: [
-            listItem(
+            _listItem(
               icon: Icon(Icons.contact_support_outlined),
               context: context,
               title: 'Contact',
             ),
-            listItem(
+            _listItem(
               icon: Icon(Icons.feedback_outlined),
               context: context,
               title: 'Feedback',
@@ -102,7 +102,7 @@ class OthersPage extends StatelessWidget {
     );
   }
 
-  Widget listItem({
+  Widget _listItem({
     required BuildContext context,
     required Icon icon,
     required String title,

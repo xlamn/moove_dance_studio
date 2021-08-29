@@ -3,14 +3,18 @@ import 'package:moove_dance_studio/moove_dance_studio.dart';
 
 class RoundedContainer extends StatelessWidget {
   final List<Widget> items;
+  final double verticalPadding;
 
-  RoundedContainer({required this.items});
+  RoundedContainer({
+    required this.items,
+    this.verticalPadding = SizeConstants.small,
+  });
 
   @override
   Widget build(BuildContext context) {
     return Padding(
       padding: EdgeInsets.symmetric(
-        vertical: SizeConstants.small,
+        vertical: verticalPadding,
       ),
       child: Container(
           margin: EdgeInsets.symmetric(
