@@ -13,14 +13,8 @@ class OthersPage extends StatelessWidget {
     return CustomScrollView(
       slivers: <Widget>[
         SliverAppBar(
+          backgroundColor: Theme.of(context).canvasColor,
           expandedHeight: 75,
-          flexibleSpace: FlexibleSpaceBar(
-            centerTitle: false,
-            titlePadding: EdgeInsets.symmetric(
-              vertical: 50,
-              horizontal: 40,
-            ),
-          ),
           actions: <Widget>[
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 20.0),
@@ -29,52 +23,51 @@ class OthersPage extends StatelessWidget {
           ],
         ),
         SliverToBoxAdapter(
-          child: listItem(
-            context: context,
-            title: 'Location',
-          ),
-        ),
+            child: RoundedContainer(
+          items: [
+            listItem(
+              icon: Icon(Icons.location_on_outlined),
+              context: context,
+              title: 'Location',
+            ),
+            listItem(
+              icon: Icon(Icons.public),
+              context: context,
+              title: 'Website',
+              page: WebsitePage(),
+            ),
+          ],
+        )),
         SliverToBoxAdapter(
-          child: listItem(
-            context: context,
-            title: 'Website',
-            page: WebsitePage(),
-          ),
-        ),
+            child: RoundedContainer(
+          items: [
+            listItem(
+              icon: Icon(Icons.privacy_tip_outlined),
+              context: context,
+              title: 'Privacy',
+            ),
+            listItem(
+              icon: Icon(Icons.text_snippet_outlined),
+              context: context,
+              title: 'User Conditions',
+            ),
+          ],
+        )),
         SliverToBoxAdapter(
-          child: Container(
-            height: 50,
-          ),
-        ),
-        SliverToBoxAdapter(
-          child: listItem(
-            context: context,
-            title: 'Privacy',
-          ),
-        ),
-        SliverToBoxAdapter(
-          child: listItem(
-            context: context,
-            title: 'User Conditions',
-          ),
-        ),
-        SliverToBoxAdapter(
-          child: Container(
-            height: 50,
-          ),
-        ),
-        SliverToBoxAdapter(
-          child: listItem(
-            context: context,
-            title: 'Contact',
-          ),
-        ),
-        SliverToBoxAdapter(
-          child: listItem(
-            context: context,
-            title: 'Feedback',
-          ),
-        ),
+            child: RoundedContainer(
+          items: [
+            listItem(
+              icon: Icon(Icons.contact_support_outlined),
+              context: context,
+              title: 'Contact',
+            ),
+            listItem(
+              icon: Icon(Icons.feedback_outlined),
+              context: context,
+              title: 'Feedback',
+            ),
+          ],
+        )),
         SliverToBoxAdapter(
           child: Container(
             height: SizeConstants.large,
@@ -111,6 +104,7 @@ class OthersPage extends StatelessWidget {
 
   Widget listItem({
     required BuildContext context,
+    required Icon icon,
     required String title,
     Widget? page,
   }) {
@@ -124,14 +118,20 @@ class OthersPage extends StatelessWidget {
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: Text(
-                title,
-                textAlign: TextAlign.left,
-                style: TextStyle(
-                  fontSize: 16.0,
-                  fontWeight: FontWeight.bold,
+            icon,
+            Expanded(
+              child: Padding(
+                padding: const EdgeInsets.symmetric(
+                  horizontal: SizeConstants.large,
+                  vertical: SizeConstants.small,
+                ),
+                child: Text(
+                  title,
+                  textAlign: TextAlign.left,
+                  style: TextStyle(
+                    fontSize: 16.0,
+                    fontWeight: FontWeight.bold,
+                  ),
                 ),
               ),
             ),

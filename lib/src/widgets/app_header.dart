@@ -10,12 +10,15 @@ class AppHeader extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return SliverAppBar(
+      backgroundColor: Theme.of(context).canvasColor,
       expandedHeight: 200,
       flexibleSpace: FlexibleSpaceBar(
         centerTitle: false,
-        titlePadding: EdgeInsets.symmetric(
-          vertical: SizeConstants.big,
-          horizontal: SizeConstants.normal,
+        titlePadding: EdgeInsets.only(
+          top: SizeConstants.large,
+          bottom: SizeConstants.normal,
+          right: SizeConstants.normal,
+          left: SizeConstants.normal,
         ),
         title: Text(
           title,
