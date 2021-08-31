@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:moove_dance_studio/moove_dance_studio.dart';
 import 'package:weekday_selector/weekday_selector.dart';
 
@@ -65,24 +66,35 @@ class SchedulePage extends StatelessWidget {
   }
 
   Widget _buildDaySelection(BuildContext context) {
-    final values = List.filled(7, true);
+    var values = List.filled(7, false);
     values.last = !values.last;
 
     return SliverToBoxAdapter(
-      child: Container(
-        padding: EdgeInsets.only(
-          bottom: SizeConstants.big,
-          top: SizeConstants.mini,
-          left: SizeConstants.normal,
-          right: SizeConstants.normal,
-        ),
-        child: WeekdaySelector(
-          onChanged: (int day) {
-            final index = day % 7;
+      child: BlocConsumer<WeekDayBloc, WeekDayState>(
+        listener: (context, state) {
+          if (state is WeekDayChangedSuccess) {
+            values = List.filled(7, false);
+            final index = state.selectedDay % 7;
             values[index] = !values[index];
-          },
-          values: values,
-        ),
+          }
+        },
+        builder: (context, state) {
+          return Container(
+            padding: EdgeInsets.only(
+              bottom: SizeConstants.big,
+              top: SizeConstants.mini,
+              left: SizeConstants.normal,
+              right: SizeConstants.normal,
+            ),
+            child: WeekdaySelector(
+              onChanged: (int day) {
+                BlocProvider.of<WeekDayBloc>(context)
+                    .add(WeekDayChanged(selectedDay: day));
+              },
+              values: values,
+            ),
+          );
+        },
       ),
     );
   }

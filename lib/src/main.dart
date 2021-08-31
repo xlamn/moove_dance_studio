@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:moove_dance_studio/moove_dance_studio.dart';
 
 const MaterialColor _primaryWhite = MaterialColor(
@@ -87,8 +88,15 @@ class _MyHomePageState extends State<MyHomePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Center(
-        child: _widgetOptions.elementAt(_selectedIndex),
+      body: MultiBlocProvider(
+        providers: [
+          BlocProvider<WeekDayBloc>(
+            create: (BuildContext context) => WeekDayBloc(),
+          ),
+        ],
+        child: Center(
+          child: _widgetOptions.elementAt(_selectedIndex),
+        ),
       ),
       bottomNavigationBar: Container(
         decoration: BoxDecoration(
