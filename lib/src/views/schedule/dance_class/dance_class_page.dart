@@ -62,9 +62,9 @@ class DanceClassPage extends StatelessWidget {
                     ),
                     Container(
                       padding:
-                          EdgeInsets.symmetric(vertical: SizeConstants.small),
+                          EdgeInsets.symmetric(vertical: SizeConstants.mini),
                       child: Text(
-                        danceClass.typeOfClass.toUpperCase(),
+                        danceClass.type.getTitle(context),
                         style: TextStyle(
                           fontSize: 48.0,
                           fontWeight: FontWeight.bold,
@@ -73,7 +73,18 @@ class DanceClassPage extends StatelessWidget {
                     ),
                     Container(
                       padding:
-                          EdgeInsets.symmetric(vertical: SizeConstants.small),
+                          EdgeInsets.symmetric(vertical: SizeConstants.normal),
+                      child: Text(
+                        danceClass.type.getDescription(context),
+                        style: TextStyle(
+                          fontSize: 16.0,
+                          height: 1.5,
+                        ),
+                      ),
+                    ),
+                    Container(
+                      padding:
+                          EdgeInsets.symmetric(vertical: SizeConstants.normal),
                       child: DanceClassLevelTag(
                         danceClass: danceClass,
                       ),

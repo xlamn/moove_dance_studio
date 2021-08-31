@@ -15,17 +15,16 @@ class SchedulePage extends StatelessWidget {
           ),
           _buildWeekSelection(context),
           _buildDaySelection(context),
-          SliverList(
-            delegate: SliverChildBuilderDelegate(
-              (BuildContext context, int index) {
-                return _buildDanceClass(
+          SliverToBoxAdapter(
+            child: RoundedContainer(items: [
+              for (var danceClass in testDanceClasses)
+                _buildDanceClass(
                   context: context,
-                  danceClass: testDanceClasses[index],
-                  withDivider: index != testDanceClasses.length - 1,
-                );
-              },
-              childCount: testDanceClasses.length,
-            ),
+                  danceClass: danceClass,
+                  withDivider:
+                      testDanceClasses.last != danceClass ? true : false,
+                ),
+            ]),
           ),
         ],
       ),
@@ -115,9 +114,6 @@ class SchedulePage extends StatelessWidget {
                       borderRadius: BorderRadius.all(
                         Radius.circular(50.0),
                       ),
-                      border: Border.all(
-                        width: 2.0,
-                      ),
                     ),
                   ),
                   Padding(
@@ -142,7 +138,7 @@ class SchedulePage extends StatelessWidget {
                             vertical: SizeConstants.small,
                           ),
                           child: Text(
-                            danceClass.typeOfClass,
+                            danceClass.type.getTitle(context),
                             style: TextStyle(
                               fontSize: 14.0,
                             ),
@@ -193,28 +189,28 @@ class SchedulePage extends StatelessWidget {
     DanceClass(
       teacherName: 'Tobi Auner',
       teacherImage: AssetImage('assets/coaches/tobi.jpg'),
-      typeOfClass: 'HipHop',
+      type: DanceClassType.hiphop,
       level: DanceClassLevel.starter,
       time: '17:30 - 18:30',
     ),
     DanceClass(
       teacherName: 'Dani Torrey-Cabello',
       teacherImage: AssetImage('assets/coaches/dani.jpg'),
-      typeOfClass: 'Popping',
+      type: DanceClassType.popping,
       level: DanceClassLevel.beginner,
       time: '18:30 - 19:30',
     ),
     DanceClass(
       teacherName: 'Dani Torrey-Cabello',
       teacherImage: AssetImage('assets/coaches/dani.jpg'),
-      typeOfClass: 'House',
+      type: DanceClassType.house,
       level: DanceClassLevel.intermediate,
       time: '19:30 - 20:30',
     ),
     DanceClass(
         teacherName: 'Tobi Auner',
         teacherImage: AssetImage('assets/coaches/tobi.jpg'),
-        typeOfClass: 'HipHop',
+        type: DanceClassType.hiphop,
         level: DanceClassLevel.masterclass,
         time: '20:30 - 22:30'),
   ];

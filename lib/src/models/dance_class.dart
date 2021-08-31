@@ -6,7 +6,7 @@ class DanceClass {
 
   final ImageProvider teacherImage;
 
-  final String typeOfClass;
+  final DanceClassType type;
 
   final DanceClassLevel level;
 
@@ -15,7 +15,7 @@ class DanceClass {
   const DanceClass({
     required this.teacherName,
     this.teacherImage = const AssetImage('assets/coaches/tobi.jpg'),
-    required this.typeOfClass,
+    required this.type,
     required this.level,
     required this.time,
   });
