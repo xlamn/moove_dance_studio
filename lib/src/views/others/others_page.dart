@@ -35,6 +35,7 @@ class OthersPage extends StatelessWidget {
               context: context,
               title: 'Website',
               page: WebsitePage(),
+              hasDivider: false,
             ),
           ],
         )),
@@ -50,6 +51,7 @@ class OthersPage extends StatelessWidget {
               icon: Icon(Icons.text_snippet_outlined),
               context: context,
               title: 'User Conditions',
+              hasDivider: false,
             ),
           ],
         )),
@@ -65,6 +67,7 @@ class OthersPage extends StatelessWidget {
               icon: Icon(Icons.feedback_outlined),
               context: context,
               title: 'Feedback',
+              hasDivider: false,
             ),
           ],
         )),
@@ -107,48 +110,57 @@ class OthersPage extends StatelessWidget {
     required Icon icon,
     required String title,
     Widget? page,
+    bool hasDivider = true,
   }) {
-    return GestureDetector(
-      behavior: HitTestBehavior.translucent,
-      child: Container(
-        padding: EdgeInsets.symmetric(
-          horizontal: SizeConstants.large,
-          vertical: SizeConstants.normal,
-        ),
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            icon,
-            Expanded(
-              child: Padding(
-                padding: const EdgeInsets.symmetric(
-                  horizontal: SizeConstants.large,
-                  vertical: SizeConstants.small,
-                ),
-                child: Text(
-                  title,
-                  textAlign: TextAlign.left,
-                  style: TextStyle(
-                    fontSize: 16.0,
-                    fontWeight: FontWeight.bold,
+    return Column(
+      children: [
+        GestureDetector(
+          behavior: HitTestBehavior.translucent,
+          child: Container(
+            padding: EdgeInsets.symmetric(
+              horizontal: SizeConstants.large,
+              vertical: SizeConstants.normal,
+            ),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                icon,
+                Expanded(
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: SizeConstants.large,
+                      vertical: SizeConstants.small,
+                    ),
+                    child: Text(
+                      title,
+                      textAlign: TextAlign.left,
+                      style: TextStyle(
+                        fontSize: 16.0,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
                   ),
                 ),
-              ),
-            ),
-            Icon(
-              Icons.arrow_right,
-            ),
-          ],
-        ),
-      ),
-      onTap: page != null
-          ? () => Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => page,
+                Icon(
+                  Icons.arrow_right,
                 ),
-              )
-          : () {},
+              ],
+            ),
+          ),
+          onTap: page != null
+              ? () => Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => page,
+                    ),
+                  )
+              : () {},
+        ),
+        if (hasDivider)
+          Divider(
+            height: 1.0,
+          ),
+      ],
     );
   }
 
