@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:intl/intl.dart';
 import 'package:moove_dance_studio/moove_dance_studio.dart';
 import 'package:weekday_selector/weekday_selector.dart';
 
@@ -34,33 +35,57 @@ class SchedulePage extends StatelessWidget {
 
   Widget _buildWeekSelection(BuildContext context) {
     return SliverToBoxAdapter(
-      child: Container(
-        padding: EdgeInsets.only(
-          top: SizeConstants.big,
-          bottom: SizeConstants.mini,
-        ),
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-          children: [
-            IconButton(
-                icon: Icon(
-                  Icons.arrow_left_rounded,
-                ),
-                onPressed: () {}),
-            Text(
-              "20.1. - 27.1",
-              style: TextStyle(
-                fontSize: 16.0,
-                fontWeight: FontWeight.normal,
+      child: BlocBuilder<WeekSelectorBloc, WeekSelectorState>(
+        builder: (context, state) {
+          if (state is WeekChangedSuccess) {
+            return Container(
+              padding: EdgeInsets.only(
+                top: SizeConstants.big,
+                bottom: SizeConstants.mini,
               ),
-            ),
-            IconButton(
-                icon: Icon(
-                  Icons.arrow_right_rounded,
-                ),
-                onPressed: null),
-          ],
-        ),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: [
+                  IconButton(
+                    icon: Icon(
+                      Icons.arrow_left_rounded,
+                    ),
+                    onPressed: () {
+                      BlocProvider.of<WeekSelectorBloc>(context).add(
+                        WeekChanged(
+                          currentWeekNumber: state.weekNumber,
+                          isNextWeek: false,
+                        ),
+                      );
+                    },
+                  ),
+                  Text(
+                    '${DateFormat('dd.MM').format(state.weekNumber.getDateByWeekNumber())} - ${DateFormat('dd.MM').format(state.weekNumber.getDateByWeekNumber(start: false))}',
+                    style: TextStyle(
+                      fontSize: 16.0,
+                      fontWeight: FontWeight.normal,
+                    ),
+                  ),
+                  IconButton(
+                    icon: Icon(
+                      Icons.arrow_right_rounded,
+                    ),
+                    onPressed: () {
+                      BlocProvider.of<WeekSelectorBloc>(context).add(
+                        WeekChanged(
+                          currentWeekNumber: state.weekNumber,
+                          isNextWeek: true,
+                        ),
+                      );
+                    },
+                  ),
+                ],
+              ),
+            );
+          } else {
+            return Container();
+          }
+        },
       ),
     );
   }

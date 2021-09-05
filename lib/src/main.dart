@@ -93,6 +93,10 @@ class _MyHomePageState extends State<MyHomePage> {
           BlocProvider<WeekDayBloc>(
             create: (BuildContext context) => WeekDayBloc(),
           ),
+          BlocProvider<WeekSelectorBloc>(
+            create: (BuildContext context) =>
+                WeekSelectorBloc()..add(GetCurrentWeek()),
+          ),
         ],
         child: Center(
           child: _widgetOptions.elementAt(_selectedIndex),
