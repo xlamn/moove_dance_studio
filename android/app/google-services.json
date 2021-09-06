@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "1006553989398",
+    "firebase_url": "https://moove-dance-studio-default-rtdb.europe-west1.firebasedatabase.app",
+    "project_id": "moove-dance-studio",
+    "storage_bucket": "moove-dance-studio.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1006553989398:android:85684c75b7c48ffe29d037",
+        "android_client_info": {
+          "package_name": "com.lamnguyen.moovedancestudio"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "1006553989398-mtq6do13i22sg57h2js31upc5eheftvr.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCNuE7IsFdic7Szw2lSi2Tl16QdRTStzI0"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "1006553989398-mtq6do13i22sg57h2js31upc5eheftvr.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "1006553989398-i4262u5bkgq7rfajp7165hderdrks7sb.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.lamnguyen.moovestudioapp"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
