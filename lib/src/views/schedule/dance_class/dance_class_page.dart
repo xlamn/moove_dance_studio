@@ -102,33 +102,34 @@ class DanceClassPage extends StatelessWidget {
                 ),
                 child: Row(
                   children: [
-                    Padding(
-                      padding: const EdgeInsets.only(
-                        right: SizeConstants.big,
-                        left: SizeConstants.mini,
-                        top: SizeConstants.mini,
-                        bottom: SizeConstants.mini,
-                      ),
-                      child: Container(
-                        width: 65.0,
-                        height: 65.0,
-                        decoration: BoxDecoration(
-                          image: DecorationImage(
-                            image: danceClass.teacherImage,
-                            fit: BoxFit.cover,
-                          ),
-                          borderRadius: BorderRadius.all(
-                            Radius.circular(50.0),
+                    if (danceClass.teacher.teacherImage != null)
+                      Padding(
+                        padding: const EdgeInsets.only(
+                          right: SizeConstants.big,
+                          left: SizeConstants.mini,
+                          top: SizeConstants.mini,
+                          bottom: SizeConstants.mini,
+                        ),
+                        child: Container(
+                          width: 65.0,
+                          height: 65.0,
+                          decoration: BoxDecoration(
+                            image: DecorationImage(
+                              image: danceClass.teacher.teacherImage!,
+                              fit: BoxFit.cover,
+                            ),
+                            borderRadius: BorderRadius.all(
+                              Radius.circular(50.0),
+                            ),
                           ),
                         ),
                       ),
-                    ),
                     Column(
                       mainAxisAlignment: MainAxisAlignment.center,
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text(
-                          danceClass.teacherName,
+                          danceClass.teacher.teacherName,
                           style: TextStyle(
                             fontSize: 20.0,
                             fontWeight: FontWeight.bold,

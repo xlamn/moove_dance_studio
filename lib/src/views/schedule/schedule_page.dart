@@ -147,15 +147,28 @@ class SchedulePage extends StatelessWidget {
                   Container(
                     width: 80.0,
                     height: 80.0,
-                    decoration: BoxDecoration(
-                      image: DecorationImage(
-                        image: danceClass.teacherImage,
-                        fit: BoxFit.cover,
-                      ),
-                      borderRadius: BorderRadius.all(
-                        Radius.circular(50.0),
-                      ),
-                    ),
+                    decoration: (danceClass.teacher.teacherImage != null)
+                        ? BoxDecoration(
+                            image: DecorationImage(
+                              image: danceClass.teacher.teacherImage!,
+                              fit: BoxFit.cover,
+                            ),
+                            borderRadius: BorderRadius.all(
+                              Radius.circular(50.0),
+                            ),
+                          )
+                        : BoxDecoration(
+                            boxShadow: [
+                              BoxShadow(
+                                color: Theme.of(context).canvasColor,
+                                spreadRadius: 0.25,
+                                blurRadius: 5.0,
+                              ),
+                            ],
+                            borderRadius: BorderRadius.all(
+                              Radius.circular(50.0),
+                            ),
+                          ),
                   ),
                   Padding(
                     padding: EdgeInsets.symmetric(
@@ -168,7 +181,7 @@ class SchedulePage extends StatelessWidget {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text(
-                          danceClass.teacherName,
+                          danceClass.teacher.teacherName,
                           style: TextStyle(
                             fontSize: 18.0,
                             fontWeight: FontWeight.w600,
@@ -237,30 +250,37 @@ class SchedulePage extends StatelessWidget {
 
   final testDanceClasses = [
     DanceClass(
-        teacherName: 'Tobi Auner',
-        teacherImage: AssetImage('assets/coaches/tobi.jpg'),
+        teacher: Teacher(
+          teacherName: 'Tobi Auner',
+          teacherImage: AssetImage('assets/coaches/tobi.jpg'),
+        ),
         type: DanceClassType.hiphop,
         level: DanceClassLevel.starter,
         time: DateTime(2021, 05, 21, 17, 30),
         durationInMin: 60),
     DanceClass(
-        teacherName: 'Dani Torrey-Cabello',
-        teacherImage: AssetImage('assets/coaches/dani.jpg'),
+        teacher: Teacher(
+          teacherName: 'Dani Torrey-Cabello',
+          teacherImage: AssetImage('assets/coaches/dani.jpg'),
+        ),
         type: DanceClassType.popping,
         level: DanceClassLevel.beginner,
         time: DateTime(2021, 05, 21, 18, 30),
         durationInMin: 60),
     DanceClass(
-      teacherName: 'Dani Torrey-Cabello',
-      teacherImage: AssetImage('assets/coaches/dani.jpg'),
+      teacher: Teacher(
+        teacherName: 'Dani Torrey-Cabello',
+        teacherImage: AssetImage('assets/coaches/dani.jpg'),
+      ),
       type: DanceClassType.house,
       level: DanceClassLevel.intermediate,
       time: DateTime(2021, 05, 21, 19, 30),
       durationInMin: 60,
     ),
     DanceClass(
-        teacherName: 'Tobi Auner',
-        teacherImage: AssetImage('assets/coaches/tobi.jpg'),
+        teacher: Teacher(
+          teacherName: 'Tobi Auner',
+        ),
         type: DanceClassType.hiphop,
         level: DanceClassLevel.masterclass,
         time: DateTime(2021, 05, 21, 20, 30),
