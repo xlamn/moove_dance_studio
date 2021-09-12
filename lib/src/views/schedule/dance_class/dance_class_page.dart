@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
+import 'package:intl/intl.dart';
 import 'package:moove_dance_studio/moove_dance_studio.dart';
 
 class DanceClassPage extends StatelessWidget {
@@ -139,7 +140,7 @@ class DanceClassPage extends StatelessWidget {
                           ),
                         ),
                         Text(
-                          danceClass.time,
+                          _getDanceClassTime(danceClass),
                           style: TextStyle(
                               fontSize: 14.0,
                               color: Theme.of(context)
@@ -182,5 +183,9 @@ class DanceClassPage extends StatelessWidget {
         ],
       ),
     );
+  }
+
+  String _getDanceClassTime(DanceClass danceClass) {
+    return "${DateFormat.Hm().format(danceClass.time).toString()} - ${DateFormat.Hm().format(danceClass.time.add(Duration(minutes: danceClass.durationInMin))).toString()}";
   }
 }

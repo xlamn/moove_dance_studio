@@ -10,7 +10,9 @@ class DanceClass {
 
   final DanceClassLevel level;
 
-  final String time;
+  final DateTime time;
+
+  final int durationInMin;
 
   const DanceClass({
     required this.teacherName,
@@ -18,5 +20,13 @@ class DanceClass {
     required this.type,
     required this.level,
     required this.time,
+    required this.durationInMin,
   });
+
+  // Map<dynamic, dynamic> toJson() => <dynamic, dynamic>{
+  //       'teacherName': teacherName,
+  //       'type': type.toString(),
+  //       'level': level.toString(),
+  //       'time': time.toString(),
+  //     };
 }
