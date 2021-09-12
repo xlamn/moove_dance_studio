@@ -10,25 +10,29 @@ class SchedulePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      child: CustomScrollView(
-        slivers: <Widget>[
-          AppHeader(
-            title: 'Schedule',
-          ),
-          _buildWeekSelection(context),
-          _buildDaySelection(context),
-          SliverToBoxAdapter(
-            child: RoundedContainer(items: [
-              for (var danceClass in testDanceClasses)
-                _buildDanceClass(
-                  context: context,
-                  danceClass: danceClass,
-                  withDivider:
-                      testDanceClasses.last != danceClass ? true : false,
-                ),
-            ]),
-          ),
-        ],
+      child: RefreshIndicator(
+        onRefresh: () => Future.value(true),
+        edgeOffset: 220,
+        child: CustomScrollView(
+          slivers: <Widget>[
+            AppHeader(
+              title: 'Schedule',
+            ),
+            _buildWeekSelection(context),
+            _buildDaySelection(context),
+            SliverToBoxAdapter(
+              child: RoundedContainer(items: [
+                for (var danceClass in testDanceClasses)
+                  _buildDanceClass(
+                    context: context,
+                    danceClass: danceClass,
+                    withDivider:
+                        testDanceClasses.last != danceClass ? true : false,
+                  ),
+              ]),
+            ),
+          ],
+        ),
       ),
     );
   }
@@ -178,11 +182,16 @@ class SchedulePage extends StatelessWidget {
                             danceClass.type.getTitle(context),
                             style: TextStyle(
                               fontSize: 14.0,
+                              color: Theme.of(context)
+                                  .textTheme
+                                  .bodyText1
+                                  ?.color!
+                                  .withOpacity(0.8),
                             ),
                           ),
                         ),
                         Text(
-                          danceClass.time,
+                          _getDanceClassTime(danceClass),
                           style: TextStyle(
                             fontSize: 14.0,
                           ),
@@ -222,33 +231,39 @@ class SchedulePage extends StatelessWidget {
     );
   }
 
+  String _getDanceClassTime(DanceClass danceClass) {
+    return "${DateFormat.Hm().format(danceClass.time).toString()} - ${DateFormat.Hm().format(danceClass.time.add(Duration(minutes: danceClass.durationInMin))).toString()}";
+  }
+
   final testDanceClasses = [
     DanceClass(
-      teacherName: 'Tobi Auner',
-      teacherImage: AssetImage('assets/coaches/tobi.jpg'),
-      type: DanceClassType.hiphop,
-      level: DanceClassLevel.starter,
-      time: '17:30 - 18:30',
-    ),
+        teacherName: 'Tobi Auner',
+        teacherImage: AssetImage('assets/coaches/tobi.jpg'),
+        type: DanceClassType.hiphop,
+        level: DanceClassLevel.starter,
+        time: DateTime(2021, 05, 21, 17, 30),
+        durationInMin: 60),
     DanceClass(
-      teacherName: 'Dani Torrey-Cabello',
-      teacherImage: AssetImage('assets/coaches/dani.jpg'),
-      type: DanceClassType.popping,
-      level: DanceClassLevel.beginner,
-      time: '18:30 - 19:30',
-    ),
+        teacherName: 'Dani Torrey-Cabello',
+        teacherImage: AssetImage('assets/coaches/dani.jpg'),
+        type: DanceClassType.popping,
+        level: DanceClassLevel.beginner,
+        time: DateTime(2021, 05, 21, 18, 30),
+        durationInMin: 60),
     DanceClass(
       teacherName: 'Dani Torrey-Cabello',
       teacherImage: AssetImage('assets/coaches/dani.jpg'),
       type: DanceClassType.house,
       level: DanceClassLevel.intermediate,
-      time: '19:30 - 20:30',
+      time: DateTime(2021, 05, 21, 19, 30),
+      durationInMin: 60,
     ),
     DanceClass(
         teacherName: 'Tobi Auner',
         teacherImage: AssetImage('assets/coaches/tobi.jpg'),
         type: DanceClassType.hiphop,
         level: DanceClassLevel.masterclass,
-        time: '20:30 - 22:30'),
+        time: DateTime(2021, 05, 21, 20, 30),
+        durationInMin: 60),
   ];
 }

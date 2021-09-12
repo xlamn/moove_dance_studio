@@ -11,23 +11,27 @@ class NewsFeedPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      child: CustomScrollView(
-        slivers: <Widget>[
-          AppHeader(
-            title: 'News Feed',
-          ),
-          SliverList(
-            delegate: SliverChildBuilderDelegate(
-              (BuildContext context, int index) {
-                return _buildNewsPost(
-                  context: context,
-                  newsPost: testNews[index],
-                );
-              },
-              childCount: testNews.length,
+      child: RefreshIndicator(
+        onRefresh: () => Future.value(true),
+        edgeOffset: 220,
+        child: CustomScrollView(
+          slivers: <Widget>[
+            AppHeader(
+              title: 'News Feed',
             ),
-          ),
-        ],
+            SliverList(
+              delegate: SliverChildBuilderDelegate(
+                (BuildContext context, int index) {
+                  return _buildNewsPost(
+                    context: context,
+                    newsPost: testNews[index],
+                  );
+                },
+                childCount: testNews.length,
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }
