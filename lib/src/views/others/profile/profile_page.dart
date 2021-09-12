@@ -1,6 +1,9 @@
+import 'dart:io';
+
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:moove_dance_studio/moove_dance_studio.dart';
 
 class ProfilePage extends StatefulWidget {
@@ -72,6 +75,17 @@ class _ProfilePageState extends State<ProfilePage> {
                   ),
                   SizedBox(height: 8.0),
                   ElevatedButton(
+                    //TODO: Move to schedule page
+                    onPressed: () async {
+                      final fileImage = await pickImage();
+                      if (fileImage != null)
+                        await FireStorage.uploadImageToFirebase(context,
+                            file: fileImage);
+                    },
+                    child: Text('Upload image'),
+                  ),
+                  SizedBox(height: 8.0),
+                  ElevatedButton(
                     onPressed: () async {
                       await FirebaseAuth.instance.signOut();
                       Navigator.pop(context);
@@ -85,5 +99,19 @@ class _ProfilePageState extends State<ProfilePage> {
         ],
       ),
     );
+  }
+
+  Future<File?> pickImage() async {
+    final pickedFile = await ImagePicker().pickImage(
+      source: ImageSource.gallery,
+      maxHeight: 1024,
+      maxWidth: 1024,
+    );
+
+    if (pickedFile != null) {
+      return File(pickedFile.path);
+    } else {
+      return null;
+    }
   }
 }
