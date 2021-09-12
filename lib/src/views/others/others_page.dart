@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:moove_dance_studio/moove_dance_studio.dart';
@@ -18,7 +19,23 @@ class OthersPage extends StatelessWidget {
           actions: <Widget>[
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 20.0),
-              child: IconButton(icon: Icon(Icons.settings), onPressed: () {}),
+              child: IconButton(
+                  icon: Icon(Icons.person),
+                  onPressed: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (context) {
+                        User? user = FirebaseAuth.instance.currentUser;
+                        if (user != null) {
+                          return ProfilePage(
+                            user: user,
+                          );
+                        } else {
+                          return LoginPage();
+                        }
+                      }),
+                    );
+                  }),
             ),
           ],
         ),
