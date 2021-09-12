@@ -4,7 +4,7 @@ import 'package:moove_dance_studio/moove_dance_studio.dart';
 class NewsPost {
   final String title;
 
-  final AssetImage image;
+  final AssetImage? image;
 
   final List<Tag> tags;
 
@@ -12,7 +12,7 @@ class NewsPost {
 
   NewsPost({
     required this.title,
-    this.image = const AssetImage('assets/coaches/tobi.jpg'),
+    this.image,
     this.tags = const [],
     this.content = '',
   });
