@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
@@ -17,6 +19,14 @@ class SchedulePage extends StatelessWidget {
           slivers: <Widget>[
             AppHeader(
               title: 'Schedule',
+              action: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => UploadPage(),
+                  ),
+                );
+              },
             ),
             _buildWeekSelection(context),
             _buildDaySelection(context),
@@ -147,10 +157,12 @@ class SchedulePage extends StatelessWidget {
                   Container(
                     width: 80.0,
                     height: 80.0,
-                    decoration: (danceClass.teacher.teacherImage != null)
+                    decoration: (danceClass.teacher.teacherImageUrl != null)
                         ? BoxDecoration(
                             image: DecorationImage(
-                              image: danceClass.teacher.teacherImage!,
+                              image: Image.memory(base64Decode(
+                                      danceClass.teacher.teacherImageUrl!))
+                                  .image,
                               fit: BoxFit.cover,
                             ),
                             borderRadius: BorderRadius.all(
@@ -192,7 +204,7 @@ class SchedulePage extends StatelessWidget {
                             vertical: SizeConstants.small,
                           ),
                           child: Text(
-                            danceClass.type.getTitle(context),
+                            danceClass.type.getTitle(),
                             style: TextStyle(
                               fontSize: 14.0,
                               color: Theme.of(context)
@@ -252,7 +264,7 @@ class SchedulePage extends StatelessWidget {
     DanceClass(
         teacher: Teacher(
           teacherName: 'Tobi Auner',
-          teacherImage: AssetImage('assets/coaches/tobi.jpg'),
+          teacherImageUrl: null,
         ),
         type: DanceClassType.hiphop,
         level: DanceClassLevel.starter,
@@ -261,7 +273,7 @@ class SchedulePage extends StatelessWidget {
     DanceClass(
         teacher: Teacher(
           teacherName: 'Dani Torrey-Cabello',
-          teacherImage: AssetImage('assets/coaches/dani.jpg'),
+          teacherImageUrl: null,
         ),
         type: DanceClassType.popping,
         level: DanceClassLevel.beginner,
@@ -270,7 +282,7 @@ class SchedulePage extends StatelessWidget {
     DanceClass(
       teacher: Teacher(
         teacherName: 'Dani Torrey-Cabello',
-        teacherImage: AssetImage('assets/coaches/dani.jpg'),
+        teacherImageUrl: null,
       ),
       type: DanceClassType.house,
       level: DanceClassLevel.intermediate,
@@ -286,4 +298,10 @@ class SchedulePage extends StatelessWidget {
         time: DateTime(2021, 05, 21, 20, 30),
         durationInMin: 60),
   ];
+
+  // Future<String> to64String() async {
+  //     ByteData bytes = await rootBundle.load('assets/coaches/tobi.jpg');
+  // var buffer = bytes.buffer;
+  // return base64Encode(Uint8List.view(buffer));
+  // }
 }

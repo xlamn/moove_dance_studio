@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:intl/intl.dart';
@@ -65,7 +67,7 @@ class DanceClassPage extends StatelessWidget {
                       padding:
                           EdgeInsets.symmetric(vertical: SizeConstants.mini),
                       child: Text(
-                        danceClass.type.getTitle(context),
+                        danceClass.type.getTitle(),
                         style: TextStyle(
                           fontSize: 48.0,
                           fontWeight: FontWeight.bold,
@@ -76,7 +78,7 @@ class DanceClassPage extends StatelessWidget {
                       padding:
                           EdgeInsets.symmetric(vertical: SizeConstants.normal),
                       child: Text(
-                        danceClass.type.getDescription(context),
+                        danceClass.type.getDescription(),
                         style: TextStyle(
                           fontSize: 16.0,
                           height: 1.5,
@@ -102,7 +104,7 @@ class DanceClassPage extends StatelessWidget {
                 ),
                 child: Row(
                   children: [
-                    if (danceClass.teacher.teacherImage != null)
+                    if (danceClass.teacher.teacherImageUrl != null)
                       Padding(
                         padding: const EdgeInsets.only(
                           right: SizeConstants.big,
@@ -115,7 +117,9 @@ class DanceClassPage extends StatelessWidget {
                           height: 65.0,
                           decoration: BoxDecoration(
                             image: DecorationImage(
-                              image: danceClass.teacher.teacherImage!,
+                              image: Image.memory(base64Decode(
+                                      danceClass.teacher.teacherImageUrl!))
+                                  .image,
                               fit: BoxFit.cover,
                             ),
                             borderRadius: BorderRadius.all(

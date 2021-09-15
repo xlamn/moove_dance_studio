@@ -1,5 +1,9 @@
 import 'package:moove_dance_studio/moove_dance_studio.dart';
+import 'package:json_annotation/json_annotation.dart';
 
+part 'dance_class.g.dart';
+
+@JsonSerializable(explicitToJson: true)
 class DanceClass {
   final Teacher teacher;
 
@@ -19,10 +23,8 @@ class DanceClass {
     required this.durationInMin,
   });
 
-  // Map<dynamic, dynamic> toJson() => <dynamic, dynamic>{
-  //       'teacherName': teacherName,
-  //       'type': type.toString(),
-  //       'level': level.toString(),
-  //       'time': time.toString(),
-  //     };
+  factory DanceClass.fromJson(Map<String, dynamic> json) =>
+      _$DanceClassFromJson(json);
+
+  Map<String, dynamic> toJson() => _$DanceClassToJson(this);
 }

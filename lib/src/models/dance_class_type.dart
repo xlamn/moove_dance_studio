@@ -1,5 +1,3 @@
-import 'package:flutter/material.dart';
-
 enum DanceClassType {
   hiphop,
   popping,
@@ -9,9 +7,7 @@ enum DanceClassType {
 }
 
 extension DanceClassTypeX on DanceClassType {
-  String getTitle(
-    BuildContext context,
-  ) {
+  String getTitle() {
     switch (this) {
       case DanceClassType.hiphop:
         return 'HipHop';
@@ -26,9 +22,7 @@ extension DanceClassTypeX on DanceClassType {
     }
   }
 
-  String getDescription(
-    BuildContext context,
-  ) {
+  String getDescription() {
     switch (this) {
       case DanceClassType.hiphop:
         return 'Hier liegt der Fokus auf den Grundschritten von HipHop. Du wirst dabei verschiedene Steps erlernen, um sie zukünftig selbstständig anwenden zu können.';
