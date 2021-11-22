@@ -1,4 +1,5 @@
 import 'package:firebase_core/firebase_core.dart';
+import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:moove_dance_studio/moove_dance_studio.dart';
@@ -67,15 +68,6 @@ class MyApp extends StatelessWidget {
 class MyHomePage extends StatefulWidget {
   MyHomePage({Key? key}) : super(key: key);
 
-  // This widget is the home page of your application. It is stateful, meaning
-  // that it has a State object (defined below) that contains fields that affect
-  // how it looks.
-
-  // This class is the configuration for the state. It holds the values (in this
-  // case the title) provided by the parent (in this case the App widget) and
-  // used by the build method of the State. Fields in a Widget subclass are
-  // always marked "final".
-
   @override
   _MyHomePageState createState() => _MyHomePageState();
 }
@@ -90,15 +82,25 @@ class _MyHomePageState extends State<MyHomePage> {
 
   @override
   Widget build(BuildContext context) {
+    final database = FirebaseDatabase.instance;
+
     return Scaffold(
       body: MultiBlocProvider(
         providers: [
+          BlocProvider<DanceClassBloc>(
+            create: (BuildContext context) => DanceClassBloc(
+              database: database,
+            )..add(DanceClassStarted()),
+          ),
           BlocProvider<WeekDayBloc>(
-            create: (BuildContext context) => WeekDayBloc(),
+            create: (BuildContext context) => WeekDayBloc(
+              danceClassBloc: BlocProvider.of<DanceClassBloc>(context),
+            )..add(GetCurrentWeekDay()),
           ),
           BlocProvider<WeekSelectorBloc>(
-            create: (BuildContext context) =>
-                WeekSelectorBloc()..add(GetCurrentWeek()),
+            create: (BuildContext context) => WeekSelectorBloc(
+              danceClassBloc: BlocProvider.of<DanceClassBloc>(context),
+            )..add(GetCurrentWeek()),
           ),
         ],
         child: Center(

@@ -3,7 +3,10 @@ import 'package:json_annotation/json_annotation.dart';
 
 part 'dance_class.g.dart';
 
-@JsonSerializable(explicitToJson: true)
+@JsonSerializable(
+  explicitToJson: true,
+  anyMap: true,
+)
 class DanceClass {
   final Teacher teacher;
 

@@ -25,11 +25,16 @@ extension DateTimeY on int {
   DateTime getDateByWeekNumber({bool start = true}) {
     DateTime startOfaYear = DateTime.utc(DateTime.now().year, 1, 1);
     int startOfaYearWeekDay = startOfaYear.weekday;
-    DateTime firstWeekOfaYear = startOfaYearWeekDay < 4
+    DateTime firstWeekOfAYear = startOfaYearWeekDay < 4
         ? startOfaYear.subtract(Duration(days: startOfaYearWeekDay - 1))
         : startOfaYear.add(Duration(days: 8 - startOfaYearWeekDay));
-    DateTime startOfNWeek =
-        firstWeekOfaYear.add(Duration(days: (this - 1) * 7));
+    DateTime startOfNWeek = firstWeekOfAYear.add(Duration(days: (this - 1) * 7));
     return start ? startOfNWeek : startOfNWeek.add(Duration(days: 6));
+  }
+}
+
+extension DateOnlyCompare on DateTime {
+  bool isSameDate(DateTime other) {
+    return year == other.year && month == other.month && day == other.day;
   }
 }

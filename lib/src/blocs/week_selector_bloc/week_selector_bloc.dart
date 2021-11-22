@@ -5,22 +5,28 @@ part 'week_selector_event.dart';
 part 'week_selector_state.dart';
 
 class WeekSelectorBloc extends Bloc<WeekSelectorEvent, WeekSelectorState> {
-  WeekSelectorBloc() : super(WeekSelectorInitial());
+  final DanceClassBloc danceClassBloc;
+
+  WeekSelectorBloc({required this.danceClassBloc}) : super(WeekSelectorInitial());
 
   @override
   Stream<WeekSelectorState> mapEventToState(WeekSelectorEvent event) async* {
     if (event is GetCurrentWeek) {
       yield WeekChangedSuccess(
-        weekNumber: DateTime.now().getWeekNumber(),
+        selectedWeek: DateTime.now().getWeekNumber(),
       );
     } else if (event is WeekChanged) {
       if (event.isNextWeek) {
+        final nextWeek = event.currentWeekNumber + 1;
+        danceClassBloc.add(DanceClassFetched(currentDay: event.currentDay, currentWeek: nextWeek));
         yield WeekChangedSuccess(
-          weekNumber: event.currentWeekNumber + 1,
+          selectedWeek: nextWeek,
         );
       } else {
+        final previousWeek = event.currentWeekNumber - 1;
+        danceClassBloc.add(DanceClassFetched(currentDay: event.currentDay, currentWeek: previousWeek));
         yield WeekChangedSuccess(
-          weekNumber: event.currentWeekNumber - 1,
+          selectedWeek: previousWeek,
         );
       }
     }

@@ -5,9 +5,9 @@ abstract class WeekSelectorState {}
 class WeekSelectorInitial extends WeekSelectorState {}
 
 class WeekChangedSuccess extends WeekSelectorState {
-  final int weekNumber;
+  final int selectedWeek;
   WeekChangedSuccess({
-    required this.weekNumber,
+    required this.selectedWeek,
   });
 }
 

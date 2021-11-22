@@ -17,7 +17,6 @@ class DanceClassPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       body: CustomScrollView(
-        physics: NeverScrollableScrollPhysics(),
         slivers: [
           SliverToBoxAdapter(
             child: Stack(
@@ -28,8 +27,7 @@ class DanceClassPage extends StatelessWidget {
                       begin: Alignment.center,
                       end: Alignment.bottomCenter,
                       colors: [Colors.black, Colors.transparent],
-                    ).createShader(
-                        Rect.fromLTRB(0, 0, rect.width, rect.height));
+                    ).createShader(Rect.fromLTRB(0, 0, rect.width, rect.height));
                   },
                   blendMode: BlendMode.dstIn,
                   child: Container(
@@ -64,8 +62,7 @@ class DanceClassPage extends StatelessWidget {
                       height: SizeConstants.large,
                     ),
                     Container(
-                      padding:
-                          EdgeInsets.symmetric(vertical: SizeConstants.mini),
+                      padding: EdgeInsets.symmetric(vertical: SizeConstants.mini),
                       child: Text(
                         danceClass.type.getTitle(),
                         style: TextStyle(
@@ -75,8 +72,7 @@ class DanceClassPage extends StatelessWidget {
                       ),
                     ),
                     Container(
-                      padding:
-                          EdgeInsets.symmetric(vertical: SizeConstants.normal),
+                      padding: EdgeInsets.symmetric(vertical: SizeConstants.normal),
                       child: Text(
                         danceClass.type.getDescription(),
                         style: TextStyle(
@@ -86,8 +82,7 @@ class DanceClassPage extends StatelessWidget {
                       ),
                     ),
                     Container(
-                      padding:
-                          EdgeInsets.symmetric(vertical: SizeConstants.normal),
+                      padding: EdgeInsets.symmetric(vertical: SizeConstants.normal),
                       child: DanceClassLevelTag(
                         danceClass: danceClass,
                       ),
@@ -117,9 +112,7 @@ class DanceClassPage extends StatelessWidget {
                           height: 65.0,
                           decoration: BoxDecoration(
                             image: DecorationImage(
-                              image: Image.memory(base64Decode(
-                                      danceClass.teacher.teacherImageUrl!))
-                                  .image,
+                              image: Image.memory(base64Decode(danceClass.teacher.teacherImageUrl!)).image,
                               fit: BoxFit.cover,
                             ),
                             borderRadius: BorderRadius.all(
@@ -147,12 +140,7 @@ class DanceClassPage extends StatelessWidget {
                         Text(
                           _getDanceClassTime(danceClass),
                           style: TextStyle(
-                              fontSize: 14.0,
-                              color: Theme.of(context)
-                                  .textTheme
-                                  .bodyText1
-                                  ?.color!
-                                  .withOpacity(0.5)),
+                              fontSize: 14.0, color: Theme.of(context).textTheme.bodyText1?.color!.withOpacity(0.5)),
                         ),
                       ],
                     ),
@@ -161,6 +149,11 @@ class DanceClassPage extends StatelessWidget {
               ),
             ]),
           ),
+          SliverToBoxAdapter(
+            child: SizedBox(
+              height: SizeConstants.big,
+            ),
+          )
           // SliverToBoxAdapter(
           //   child: Container(
           //     width: MediaQuery.of(context).size.width,

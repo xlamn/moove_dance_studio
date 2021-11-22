@@ -6,8 +6,9 @@ part of 'dance_class.dart';
 // JsonSerializableGenerator
 // **************************************************************************
 
-DanceClass _$DanceClassFromJson(Map<String, dynamic> json) => DanceClass(
-      teacher: Teacher.fromJson(json['teacher'] as Map<String, dynamic>),
+DanceClass _$DanceClassFromJson(Map json) => DanceClass(
+      teacher:
+          Teacher.fromJson(Map<String, dynamic>.from(json['teacher'] as Map)),
       type: _$enumDecode(_$DanceClassTypeEnumMap, json['type']),
       level: _$enumDecode(_$DanceClassLevelEnumMap, json['level']),
       time: DateTime.parse(json['time'] as String),

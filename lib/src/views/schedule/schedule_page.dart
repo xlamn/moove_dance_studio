@@ -6,14 +6,24 @@ import 'package:intl/intl.dart';
 import 'package:moove_dance_studio/moove_dance_studio.dart';
 import 'package:weekday_selector/weekday_selector.dart';
 
+// ignore: must_be_immutable
 class SchedulePage extends StatelessWidget {
   SchedulePage({Key? key}) : super(key: key);
+
+  var _currentWeek;
+  var _currentDay;
 
   @override
   Widget build(BuildContext context) {
     return Container(
       child: RefreshIndicator(
-        onRefresh: () => Future.value(true),
+        onRefresh: () {
+          BlocProvider.of<DanceClassBloc>(context).add(DanceClassFetched(
+            currentDay: _currentDay,
+            currentWeek: _currentWeek,
+          ));
+          return Future.value(true);
+        },
         edgeOffset: 220,
         child: CustomScrollView(
           slivers: <Widget>[
@@ -31,15 +41,69 @@ class SchedulePage extends StatelessWidget {
             _buildWeekSelection(context),
             _buildDaySelection(context),
             SliverToBoxAdapter(
-              child: RoundedContainer(items: [
-                for (var danceClass in testDanceClasses)
-                  _buildDanceClass(
-                    context: context,
-                    danceClass: danceClass,
-                    withDivider:
-                        testDanceClasses.last != danceClass ? true : false,
+              child: BlocBuilder<DanceClassBloc, DanceClassState>(builder: (context, state) {
+                if (state is DanceClassFetchSuccess) {
+                  return state.danceClasses.isEmpty
+                      ? Container(
+                          padding: EdgeInsets.all(SizeConstants.large),
+                          child: Center(
+                            child: Text(
+                              'Seems like there are no classes on this day...',
+                              style: TextStyle(
+                                fontSize: 16.0,
+                              ),
+                            ),
+                          ),
+                        )
+                      : RoundedContainer(
+                          items: [
+                            for (var danceClass in state.danceClasses)
+                              _buildDanceClass(
+                                context: context,
+                                danceClass: danceClass,
+                                withDivider: state.danceClasses.last != danceClass ? true : false,
+                              ),
+                          ],
+                        );
+                }
+                if (state is DanceClassFetchInProgress) {
+                  return Container(
+                    padding: EdgeInsets.all(SizeConstants.large),
+                    child: Center(
+                      child: Text(
+                        'Loading dance classes ...',
+                        style: TextStyle(
+                          fontSize: 16.0,
+                        ),
+                      ),
+                    ),
+                  );
+                }
+                if (state is DanceClassFetchFailure) {
+                  return Container(
+                    padding: EdgeInsets.all(SizeConstants.large),
+                    child: Center(
+                      child: Text(
+                        'Something went wrong ...',
+                        style: TextStyle(
+                          fontSize: 16.0,
+                        ),
+                      ),
+                    ),
+                  );
+                }
+                return Container(
+                  padding: EdgeInsets.all(SizeConstants.large),
+                  child: Center(
+                    child: Text(
+                      'Nothing to show here ...',
+                      style: TextStyle(
+                        fontSize: 16.0,
+                      ),
+                    ),
                   ),
-              ]),
+                );
+              }),
             ),
           ],
         ),
@@ -52,6 +116,7 @@ class SchedulePage extends StatelessWidget {
       child: BlocBuilder<WeekSelectorBloc, WeekSelectorState>(
         builder: (context, state) {
           if (state is WeekChangedSuccess) {
+            _currentWeek = state.selectedWeek;
             return Container(
               padding: EdgeInsets.only(
                 top: SizeConstants.big,
@@ -67,14 +132,15 @@ class SchedulePage extends StatelessWidget {
                     onPressed: () {
                       BlocProvider.of<WeekSelectorBloc>(context).add(
                         WeekChanged(
-                          currentWeekNumber: state.weekNumber,
+                          currentDay: _currentDay,
+                          currentWeekNumber: state.selectedWeek,
                           isNextWeek: false,
                         ),
                       );
                     },
                   ),
                   Text(
-                    '${DateFormat('dd.MM').format(state.weekNumber.getDateByWeekNumber())} - ${DateFormat('dd.MM').format(state.weekNumber.getDateByWeekNumber(start: false))}',
+                    '${DateFormat('dd.MM').format(state.selectedWeek.getDateByWeekNumber())} - ${DateFormat('dd.MM').format(state.selectedWeek.getDateByWeekNumber(start: false))}',
                     style: TextStyle(
                       fontSize: 16.0,
                       fontWeight: FontWeight.normal,
@@ -87,7 +153,8 @@ class SchedulePage extends StatelessWidget {
                     onPressed: () {
                       BlocProvider.of<WeekSelectorBloc>(context).add(
                         WeekChanged(
-                          currentWeekNumber: state.weekNumber,
+                          currentDay: _currentDay,
+                          currentWeekNumber: state.selectedWeek,
                           isNextWeek: true,
                         ),
                       );
@@ -115,6 +182,7 @@ class SchedulePage extends StatelessWidget {
             values = List.filled(7, false);
             final index = state.selectedDay % 7;
             values[index] = !values[index];
+            _currentDay = index;
           }
         },
         builder: (context, state) {
@@ -127,8 +195,12 @@ class SchedulePage extends StatelessWidget {
             ),
             child: WeekdaySelector(
               onChanged: (int day) {
-                BlocProvider.of<WeekDayBloc>(context)
-                    .add(WeekDayChanged(selectedDay: day));
+                BlocProvider.of<WeekDayBloc>(context).add(
+                  WeekDayChanged(
+                    selectedDay: day,
+                    currentWeek: _currentWeek,
+                  ),
+                );
               },
               values: values,
             ),
@@ -160,9 +232,7 @@ class SchedulePage extends StatelessWidget {
                     decoration: (danceClass.teacher.teacherImageUrl != null)
                         ? BoxDecoration(
                             image: DecorationImage(
-                              image: Image.memory(base64Decode(
-                                      danceClass.teacher.teacherImageUrl!))
-                                  .image,
+                              image: Image.memory(base64Decode(danceClass.teacher.teacherImageUrl!)).image,
                               fit: BoxFit.cover,
                             ),
                             borderRadius: BorderRadius.all(
@@ -207,11 +277,7 @@ class SchedulePage extends StatelessWidget {
                             danceClass.type.getTitle(),
                             style: TextStyle(
                               fontSize: 14.0,
-                              color: Theme.of(context)
-                                  .textTheme
-                                  .bodyText1
-                                  ?.color!
-                                  .withOpacity(0.8),
+                              color: Theme.of(context).textTheme.bodyText1?.color!.withOpacity(0.8),
                             ),
                           ),
                         ),
@@ -259,45 +325,6 @@ class SchedulePage extends StatelessWidget {
   String _getDanceClassTime(DanceClass danceClass) {
     return "${DateFormat.Hm().format(danceClass.time).toString()} - ${DateFormat.Hm().format(danceClass.time.add(Duration(minutes: danceClass.durationInMin))).toString()}";
   }
-
-  final testDanceClasses = [
-    DanceClass(
-        teacher: Teacher(
-          teacherName: 'Tobi Auner',
-          teacherImageUrl: null,
-        ),
-        type: DanceClassType.hiphop,
-        level: DanceClassLevel.starter,
-        time: DateTime(2021, 05, 21, 17, 30),
-        durationInMin: 60),
-    DanceClass(
-        teacher: Teacher(
-          teacherName: 'Dani Torrey-Cabello',
-          teacherImageUrl: null,
-        ),
-        type: DanceClassType.popping,
-        level: DanceClassLevel.beginner,
-        time: DateTime(2021, 05, 21, 18, 30),
-        durationInMin: 60),
-    DanceClass(
-      teacher: Teacher(
-        teacherName: 'Dani Torrey-Cabello',
-        teacherImageUrl: null,
-      ),
-      type: DanceClassType.house,
-      level: DanceClassLevel.intermediate,
-      time: DateTime(2021, 05, 21, 19, 30),
-      durationInMin: 60,
-    ),
-    DanceClass(
-        teacher: Teacher(
-          teacherName: 'Tobi Auner',
-        ),
-        type: DanceClassType.hiphop,
-        level: DanceClassLevel.masterclass,
-        time: DateTime(2021, 05, 21, 20, 30),
-        durationInMin: 60),
-  ];
 
   // Future<String> to64String() async {
   //     ByteData bytes = await rootBundle.load('assets/coaches/tobi.jpg');

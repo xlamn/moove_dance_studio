@@ -18,7 +18,9 @@ class OthersPage extends StatelessWidget {
           expandedHeight: 75,
           actions: <Widget>[
             Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 20.0),
+              padding: const EdgeInsets.symmetric(
+                horizontal: SizeConstants.large,
+              ),
               child: IconButton(
                   icon: Icon(Icons.person),
                   onPressed: () {
