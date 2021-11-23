@@ -40,12 +40,23 @@ class SchedulePage extends StatelessWidget {
                               onPressed: () => Navigator.pushReplacement(
                                 context,
                                 MaterialPageRoute(
-                                  builder: (context) => BlocProvider<TeacherSelectorBloc>(
-                                    create: (BuildContext context) => TeacherSelectorBloc(
-                                      database: FirebaseDatabase.instance,
-                                    )..add(
-                                        TeacherSelectorStarted(),
+                                  builder: (context) => MultiBlocProvider(
+                                    providers: [
+                                      BlocProvider<TeacherSelectorBloc>(
+                                        create: (BuildContext context) => TeacherSelectorBloc(
+                                          database: FirebaseDatabase.instance,
+                                        )..add(
+                                            TeacherSelectorStarted(),
+                                          ),
                                       ),
+                                      BlocProvider<UploadDanceClassBloc>(
+                                        create: (BuildContext context) => UploadDanceClassBloc(
+                                          database: FirebaseDatabase(
+                                              databaseURL:
+                                                  'https://moove-dance-studio-default-rtdb.europe-west1.firebasedatabase.app/'),
+                                        ),
+                                      ),
+                                    ],
                                     child: UploadDanceClassPage(),
                                   ),
                                 ),

@@ -1,4 +1,3 @@
-import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -14,10 +13,6 @@ class UploadDanceClassPage extends StatefulWidget {
 }
 
 class _UploadDanceClassPageState extends State<UploadDanceClassPage> {
-  final DatabaseReference _messagesRef =
-      FirebaseDatabase(databaseURL: 'https://moove-dance-studio-default-rtdb.europe-west1.firebasedatabase.app/')
-          .reference();
-
   var danceClassTypeValue = DanceClassType.hiphop;
   var danceClassLevelValue = DanceClassLevel.beginner;
   var _timeValue = DateTime.now();
@@ -27,62 +22,89 @@ class _UploadDanceClassPageState extends State<UploadDanceClassPage> {
   final _durationController = TextEditingController(text: "60");
   final _focusDuration = FocusNode();
 
-  final _teacherNameController = TextEditingController();
-  final _focusTeacherName = FocusNode();
-
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: CustomScrollView(
-        slivers: <Widget>[
-          AppHeader(
-            title: 'New \nDance Class',
+    return BlocConsumer<UploadDanceClassBloc, UploadDanceClassState>(listener: (context, state) {
+      if (state is UploadDanceClassSuccess) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text('Dance Class successfully uploaded.'),
           ),
-          SliverToBoxAdapter(
-              child: Material(
-            child: Container(
-              padding: const EdgeInsets.symmetric(horizontal: SizeConstants.large, vertical: SizeConstants.big),
-              child: Column(
-                children: [
-                  SizedBox(
-                    height: SizeConstants.normal,
-                  ),
-                  _buildDanceClassScaffold(),
-                  SizedBox(
-                    height: SizeConstants.normal,
-                  ),
-                  Row(
-                    children: [
-                      Expanded(
-                        child: ElevatedButton(
-                          onPressed: () async {
-                            _messagesRef.child('Dance Class').push().set(
-                                  DanceClass(
+        );
+        Navigator.of(context).pop();
+      }
+      if (state is UploadDanceClassFailure) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text('Failed to upload Dance Class.'),
+          ),
+        );
+      }
+    }, builder: (context, state) {
+      if (state is UploadDanceClassInProgress) {
+        return Container(
+          padding: const EdgeInsets.all(
+            SizeConstants.big,
+          ),
+          child: Center(
+            child: CircularProgressIndicator(),
+          ),
+        );
+      }
+      return Scaffold(
+        body: CustomScrollView(
+          slivers: <Widget>[
+            AppHeader(
+              title: 'New \nDance Class',
+            ),
+            SliverToBoxAdapter(
+                child: Material(
+              child: Container(
+                padding: const EdgeInsets.symmetric(horizontal: SizeConstants.large, vertical: SizeConstants.big),
+                child: Column(
+                  children: [
+                    SizedBox(
+                      height: SizeConstants.normal,
+                    ),
+                    _buildDanceClassScaffold(),
+                    SizedBox(
+                      height: SizeConstants.normal,
+                    ),
+                    Row(
+                      children: [
+                        Expanded(
+                          child: ElevatedButton(
+                            onPressed: () async {
+                              BlocProvider.of<UploadDanceClassBloc>(context).add(
+                                DanceClassUploaded(
+                                  danceClass: DanceClass(
                                     teacher: BlocProvider.of<TeacherSelectorBloc>(context).state.selectedTeacher!,
                                     type: danceClassTypeValue,
                                     level: danceClassLevelValue,
                                     time: DateTime.now(),
                                     durationInMin: 10,
-                                  ).toJson(),
-                                );
-                          },
-                          child: Text(
-                            'Upload',
+                                  ),
+                                ),
+                              );
+                            },
+                            child: Text(
+                              'Upload',
+                            ),
                           ),
                         ),
-                      ),
-                    ],
-                  )
-                ],
+                      ],
+                    )
+                  ],
+                ),
               ),
-            ),
-          ))
-        ],
-      ),
-    );
+            ))
+          ],
+        ),
+      );
+    });
   }
 
-  _buildDanceClassScaffold() {
+  Widget _buildDanceClassScaffold() {
     return Column(
       children: [
         Row(
