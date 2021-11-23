@@ -26,8 +26,11 @@ dependencies:
   url_launcher: ^6.0.9
   webview_flutter: ^2.0.12
   weekday_selector: ^1.0.0
+
   flutter_bloc: ^7.2.0
   bloc: ^7.1.0
+  equatable: ^2.0.3
+
   intl: ^0.17.0
 
   json_serializable: ^5.0.0
