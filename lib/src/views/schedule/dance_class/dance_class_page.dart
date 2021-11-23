@@ -1,5 +1,3 @@
-import 'dart:convert';
-
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:intl/intl.dart';
@@ -112,7 +110,7 @@ class DanceClassPage extends StatelessWidget {
                           height: 65.0,
                           decoration: BoxDecoration(
                             image: DecorationImage(
-                              image: Image.memory(base64Decode(danceClass.teacher.teacherImageUrl!)).image,
+                              image: NetworkImage(danceClass.teacher.teacherImageUrl!),
                               fit: BoxFit.cover,
                             ),
                             borderRadius: BorderRadius.all(

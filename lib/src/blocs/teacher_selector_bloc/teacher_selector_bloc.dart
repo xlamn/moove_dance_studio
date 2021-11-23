@@ -26,6 +26,8 @@ class TeacherSelectorBloc extends Bloc<TeacherSelectorEvent, TeacherSelectorStat
           });
         }).timeout(Duration(seconds: 5));
 
+        teachers.sort((a, b) => a.teacherName.compareTo(b.teacherName));
+
         yield TeachersFetchSuccess(
           selectedTeacher: teachers.first,
           teachers: teachers,

@@ -1,6 +1,5 @@
-import 'dart:convert';
-
 import 'package:firebase_database/firebase_database.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
@@ -33,19 +32,37 @@ class SchedulePage extends StatelessWidget {
             AppHeader(
               title: 'Schedule',
               action: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => BlocProvider<TeacherSelectorBloc>(
-                      create: (BuildContext context) => TeacherSelectorBloc(
-                        database: FirebaseDatabase.instance,
-                      )..add(
-                          TeacherSelectorStarted(),
-                        ),
-                      child: UploadDanceClassPage(),
-                    ),
-                  ),
-                );
+                showCupertinoModalPopup(
+                    context: context,
+                    builder: (context) => CupertinoActionSheet(
+                          actions: [
+                            CupertinoActionSheetAction(
+                              onPressed: () => Navigator.pushReplacement(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) => BlocProvider<TeacherSelectorBloc>(
+                                    create: (BuildContext context) => TeacherSelectorBloc(
+                                      database: FirebaseDatabase.instance,
+                                    )..add(
+                                        TeacherSelectorStarted(),
+                                      ),
+                                    child: UploadDanceClassPage(),
+                                  ),
+                                ),
+                              ),
+                              child: Text('Dance Class'),
+                            ),
+                            CupertinoActionSheetAction(
+                              onPressed: () => Navigator.pushReplacement(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) => UploadTeacherPage(),
+                                ),
+                              ),
+                              child: Text('Teacher'),
+                            ),
+                          ],
+                        ));
               },
             ),
             _buildWeekSelection(context),
@@ -242,7 +259,7 @@ class SchedulePage extends StatelessWidget {
                     decoration: (danceClass.teacher.teacherImageUrl != null)
                         ? BoxDecoration(
                             image: DecorationImage(
-                              image: Image.memory(base64Decode(danceClass.teacher.teacherImageUrl!)).image,
+                              image: NetworkImage(danceClass.teacher.teacherImageUrl!),
                               fit: BoxFit.cover,
                             ),
                             borderRadius: BorderRadius.all(
