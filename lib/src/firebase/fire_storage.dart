@@ -5,11 +5,10 @@ import 'package:flutter/widgets.dart';
 import 'package:path/path.dart';
 
 class FireStorage {
-  static Future uploadImageToFirebase(BuildContext context,
-      {required File file}) async {
+  static Future uploadImageToFirebase(BuildContext context, {required File file}) async {
     String fileName = basename(file.path);
 
-    FirebaseStorage.instance.ref(fileName).putFile(file).whenComplete(
+    FirebaseStorage.instance.ref('teacher/$fileName').putFile(file).whenComplete(
           () => print('upload done'),
         );
   }

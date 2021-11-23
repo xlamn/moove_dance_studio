@@ -18,10 +18,12 @@ class SchedulePage extends StatelessWidget {
     return Container(
       child: RefreshIndicator(
         onRefresh: () {
-          BlocProvider.of<DanceClassBloc>(context).add(DanceClassFetched(
-            currentDay: _currentDay,
-            currentWeek: _currentWeek,
-          ));
+          BlocProvider.of<DanceClassBloc>(context).add(
+            DanceClassFetched(
+              currentDay: _currentDay,
+              currentWeek: _currentWeek,
+            ),
+          );
           return Future.value(true);
         },
         edgeOffset: 220,

@@ -84,61 +84,61 @@ class _MyHomePageState extends State<MyHomePage> {
   Widget build(BuildContext context) {
     final database = FirebaseDatabase.instance;
 
-    return Scaffold(
-      body: MultiBlocProvider(
-        providers: [
-          BlocProvider<DanceClassBloc>(
-            create: (BuildContext context) => DanceClassBloc(
-              database: database,
-            )..add(DanceClassStarted()),
-          ),
-          BlocProvider<WeekDayBloc>(
-            create: (BuildContext context) => WeekDayBloc(
-              danceClassBloc: BlocProvider.of<DanceClassBloc>(context),
-            )..add(GetCurrentWeekDay()),
-          ),
-          BlocProvider<WeekSelectorBloc>(
-            create: (BuildContext context) => WeekSelectorBloc(
-              danceClassBloc: BlocProvider.of<DanceClassBloc>(context),
-            )..add(GetCurrentWeek()),
-          ),
-        ],
-        child: Center(
+    return MultiBlocProvider(
+      providers: [
+        BlocProvider<DanceClassBloc>(
+          create: (BuildContext context) => DanceClassBloc(
+            database: database,
+          )..add(DanceClassStarted()),
+        ),
+        BlocProvider<WeekDayBloc>(
+          create: (BuildContext context) => WeekDayBloc(
+            danceClassBloc: BlocProvider.of<DanceClassBloc>(context),
+          )..add(GetCurrentWeekDay()),
+        ),
+        BlocProvider<WeekSelectorBloc>(
+          create: (BuildContext context) => WeekSelectorBloc(
+            danceClassBloc: BlocProvider.of<DanceClassBloc>(context),
+          )..add(GetCurrentWeek()),
+        ),
+      ],
+      child: Scaffold(
+        body: Center(
           child: _widgetOptions.elementAt(_selectedIndex),
         ),
-      ),
-      bottomNavigationBar: Container(
-        decoration: BoxDecoration(
-          color: Theme.of(context).primaryColor,
-          boxShadow: [
-            BoxShadow(
-              color: Colors.black.withOpacity(0.2),
-              spreadRadius: 0.5,
-              blurRadius: 15.0,
-            ),
-          ],
-        ),
-        height: 100,
-        child: BottomNavigationBar(
-          items: const <BottomNavigationBarItem>[
-            BottomNavigationBarItem(
-              icon: Icon(Icons.home),
-              label: 'Home',
-            ),
-            BottomNavigationBarItem(
-              icon: Icon(Icons.event),
-              label: 'Schedule',
-            ),
-            BottomNavigationBarItem(
-              icon: Icon(Icons.menu_rounded),
-              label: 'Others',
-            ),
-          ],
-          showSelectedLabels: false,
-          showUnselectedLabels: false,
-          currentIndex: _selectedIndex,
-          onTap: _onItemTapped,
-          iconSize: 30.0,
+        bottomNavigationBar: Container(
+          decoration: BoxDecoration(
+            color: Theme.of(context).primaryColor,
+            boxShadow: [
+              BoxShadow(
+                color: Colors.black.withOpacity(0.2),
+                spreadRadius: 0.5,
+                blurRadius: 15.0,
+              ),
+            ],
+          ),
+          height: 100,
+          child: BottomNavigationBar(
+            items: const <BottomNavigationBarItem>[
+              BottomNavigationBarItem(
+                icon: Icon(Icons.home),
+                label: 'Home',
+              ),
+              BottomNavigationBarItem(
+                icon: Icon(Icons.event),
+                label: 'Schedule',
+              ),
+              BottomNavigationBarItem(
+                icon: Icon(Icons.menu_rounded),
+                label: 'Others',
+              ),
+            ],
+            showSelectedLabels: false,
+            showUnselectedLabels: false,
+            currentIndex: _selectedIndex,
+            onTap: _onItemTapped,
+            iconSize: 30.0,
+          ),
         ),
       ),
     );

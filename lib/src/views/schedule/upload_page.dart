@@ -1,8 +1,10 @@
 import 'package:firebase_database/firebase_database.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:moove_dance_studio/moove_dance_studio.dart';
 
 class UploadPage extends StatefulWidget {
@@ -13,16 +15,16 @@ class UploadPage extends StatefulWidget {
 }
 
 class _UploadPageState extends State<UploadPage> {
-  final DatabaseReference _messagesRef = FirebaseDatabase(
-          databaseURL:
-              'https://moove-dance-studio-default-rtdb.europe-west1.firebasedatabase.app/')
-      .reference();
+  final DatabaseReference _messagesRef =
+      FirebaseDatabase(databaseURL: 'https://moove-dance-studio-default-rtdb.europe-west1.firebasedatabase.app/')
+          .reference();
 
   String dropdownValue = 'Dance Class';
   var teacherValue = 'Marco';
   var danceClassTypeValue = DanceClassType.hiphop;
   var danceClassLevelValue = DanceClassLevel.beginner;
   var _timeValue = DateTime.now();
+  var _imageUrl;
   final _timeController = TextEditingController(
     text: DateTime.now().toString(),
   );
@@ -43,8 +45,7 @@ class _UploadPageState extends State<UploadPage> {
           SliverToBoxAdapter(
               child: Material(
             child: Container(
-              padding: const EdgeInsets.symmetric(
-                  horizontal: SizeConstants.large, vertical: SizeConstants.big),
+              padding: const EdgeInsets.symmetric(horizontal: SizeConstants.large, vertical: SizeConstants.big),
               child: Column(
                 children: [
                   DropdownButton(
@@ -64,8 +65,7 @@ class _UploadPageState extends State<UploadPage> {
                   SizedBox(
                     height: SizeConstants.normal,
                   ),
-                  if (dropdownValue == "Dance Class")
-                    _buildDanceClassScaffold(),
+                  if (dropdownValue == "Dance Class") _buildDanceClassScaffold(),
                   if (dropdownValue == "Teacher") _buildTeacherScaffold(),
                   SizedBox(
                     height: SizeConstants.normal,
@@ -77,9 +77,7 @@ class _UploadPageState extends State<UploadPage> {
                           onPressed: () async {
                             _messagesRef.child(dropdownValue).push().set(
                                   DanceClass(
-                                    teacher: Teacher(
-                                        teacherName: teacherValue,
-                                        teacherImageUrl: null),
+                                    teacher: Teacher(teacherName: teacherValue, teacherImageUrl: null),
                                     type: danceClassTypeValue,
                                     level: danceClassLevelValue,
                                     time: DateTime.now(),
@@ -224,9 +222,7 @@ class _UploadPageState extends State<UploadPage> {
         ),
         Row(
           children: [
-            SizedBox(
-                width: MediaQuery.of(context).size.width * 0.2,
-                child: Text('Duration: ')),
+            SizedBox(width: MediaQuery.of(context).size.width * 0.2, child: Text('Duration: ')),
             Expanded(
               child: Container(
                 padding: EdgeInsets.symmetric(horizontal: SizeConstants.large),
@@ -278,6 +274,15 @@ class _UploadPageState extends State<UploadPage> {
         Row(
           children: [
             Text("Image: "),
+            if (_imageUrl != null) Text('Image Selected'),
+            ElevatedButton(
+              child: Text(
+                _imageUrl != null ? 'Select Other' : 'Select',
+              ),
+              onPressed: () {
+                _navigateAndDisplayImageSelectorPage(context);
+              },
+            )
           ],
         )
       ],
@@ -313,5 +318,22 @@ class _UploadPageState extends State<UploadPage> {
                 ],
               ),
             ));
+  }
+
+  _navigateAndDisplayImageSelectorPage(BuildContext context) async {
+    final result = await Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => BlocProvider(
+          create: (BuildContext context) => TeacherImageBloc(
+            storage: FirebaseStorage.instance,
+          )..add(TeacherImageStarted()),
+          child: ImageSelectionPage(),
+        ),
+      ),
+    );
+    setState(() {
+      _imageUrl = result;
+    });
   }
 }
