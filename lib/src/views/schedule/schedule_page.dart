@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
@@ -35,7 +36,14 @@ class SchedulePage extends StatelessWidget {
                 Navigator.push(
                   context,
                   MaterialPageRoute(
-                    builder: (context) => UploadPage(),
+                    builder: (context) => BlocProvider<TeacherSelectorBloc>(
+                      create: (BuildContext context) => TeacherSelectorBloc(
+                        database: FirebaseDatabase.instance,
+                      )..add(
+                          TeacherSelectorStarted(),
+                        ),
+                      child: UploadDanceClassPage(),
+                    ),
                   ),
                 );
               },

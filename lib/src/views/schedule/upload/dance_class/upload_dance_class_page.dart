@@ -1,5 +1,4 @@
 import 'package:firebase_database/firebase_database.dart';
-import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -7,24 +6,21 @@ import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:moove_dance_studio/moove_dance_studio.dart';
 
-class UploadPage extends StatefulWidget {
-  UploadPage({Key? key}) : super(key: key);
+class UploadDanceClassPage extends StatefulWidget {
+  UploadDanceClassPage({Key? key}) : super(key: key);
 
   @override
-  _UploadPageState createState() => _UploadPageState();
+  _UploadDanceClassPageState createState() => _UploadDanceClassPageState();
 }
 
-class _UploadPageState extends State<UploadPage> {
+class _UploadDanceClassPageState extends State<UploadDanceClassPage> {
   final DatabaseReference _messagesRef =
       FirebaseDatabase(databaseURL: 'https://moove-dance-studio-default-rtdb.europe-west1.firebasedatabase.app/')
           .reference();
 
-  String dropdownValue = 'Dance Class';
-  var teacherValue = 'Marco';
   var danceClassTypeValue = DanceClassType.hiphop;
   var danceClassLevelValue = DanceClassLevel.beginner;
   var _timeValue = DateTime.now();
-  var _imageUrl;
   final _timeController = TextEditingController(
     text: DateTime.now().toString(),
   );
@@ -40,7 +36,7 @@ class _UploadPageState extends State<UploadPage> {
       body: CustomScrollView(
         slivers: <Widget>[
           AppHeader(
-            title: 'Upload',
+            title: 'New \nDance Class',
           ),
           SliverToBoxAdapter(
               child: Material(
@@ -48,25 +44,10 @@ class _UploadPageState extends State<UploadPage> {
               padding: const EdgeInsets.symmetric(horizontal: SizeConstants.large, vertical: SizeConstants.big),
               child: Column(
                 children: [
-                  DropdownButton(
-                    value: dropdownValue,
-                    onChanged: (String? newValue) {
-                      setState(() {
-                        dropdownValue = newValue!;
-                      });
-                    },
-                    items: ['Dance Class', 'Teacher']
-                        .map((value) => DropdownMenuItem(
-                              child: Text(value),
-                              value: value,
-                            ))
-                        .toList(),
-                  ),
                   SizedBox(
                     height: SizeConstants.normal,
                   ),
-                  if (dropdownValue == "Dance Class") _buildDanceClassScaffold(),
-                  if (dropdownValue == "Teacher") _buildTeacherScaffold(),
+                  _buildDanceClassScaffold(),
                   SizedBox(
                     height: SizeConstants.normal,
                   ),
@@ -75,9 +56,9 @@ class _UploadPageState extends State<UploadPage> {
                       Expanded(
                         child: ElevatedButton(
                           onPressed: () async {
-                            _messagesRef.child(dropdownValue).push().set(
+                            _messagesRef.child('Dance Class').push().set(
                                   DanceClass(
-                                    teacher: Teacher(teacherName: teacherValue, teacherImageUrl: null),
+                                    teacher: BlocProvider.of<TeacherSelectorBloc>(context).state.selectedTeacher!,
                                     type: danceClassTypeValue,
                                     level: danceClassLevelValue,
                                     time: DateTime.now(),
@@ -110,25 +91,34 @@ class _UploadPageState extends State<UploadPage> {
               width: MediaQuery.of(context).size.width * 0.2,
               child: Text('Teacher: '),
             ),
-            Expanded(
-              child: Container(
-                padding: EdgeInsets.symmetric(horizontal: SizeConstants.large),
-                child: DropdownButton(
-                  isExpanded: true,
-                  value: teacherValue,
-                  onChanged: (String? newValue) {
-                    setState(() {
-                      teacherValue = newValue!;
-                    });
-                  },
-                  items: ['Marco', 'Lukas']
-                      .map((value) => DropdownMenuItem(
-                            child: Text(value),
-                            value: value,
-                          ))
-                      .toList(),
-                ),
-              ),
+            BlocBuilder<TeacherSelectorBloc, TeacherSelectorState>(
+              builder: (context, state) {
+                if (state is TeachersFetchSuccess) {
+                  return Expanded(
+                    child: Container(
+                      padding: EdgeInsets.symmetric(
+                        horizontal: SizeConstants.large,
+                      ),
+                      child: DropdownButton(
+                        isExpanded: true,
+                        value: state.selectedTeacher,
+                        onChanged: (Teacher? newValue) {
+                          BlocProvider.of<TeacherSelectorBloc>(context).add(
+                            TeacherSelected(selectedTeacher: newValue!),
+                          );
+                        },
+                        items: state.teachers
+                            .map((value) => DropdownMenuItem(
+                                  child: Text(value.teacherName),
+                                  value: value,
+                                ))
+                            .toList(),
+                      ),
+                    ),
+                  );
+                }
+                return Container();
+              },
             ),
           ],
         ),
@@ -249,46 +239,6 @@ class _UploadPageState extends State<UploadPage> {
     );
   }
 
-  Widget _buildTeacherScaffold() {
-    return Column(
-      children: [
-        Row(
-          children: [
-            Text('Name: '),
-            Expanded(
-              child: TextFormField(
-                controller: _teacherNameController,
-                focusNode: _focusTeacherName,
-                decoration: InputDecoration(
-                  errorBorder: UnderlineInputBorder(
-                    borderRadius: BorderRadius.circular(6.0),
-                    borderSide: BorderSide(
-                      color: Colors.red,
-                    ),
-                  ),
-                ),
-              ),
-            ),
-          ],
-        ),
-        Row(
-          children: [
-            Text("Image: "),
-            if (_imageUrl != null) Text('Image Selected'),
-            ElevatedButton(
-              child: Text(
-                _imageUrl != null ? 'Select Other' : 'Select',
-              ),
-              onPressed: () {
-                _navigateAndDisplayImageSelectorPage(context);
-              },
-            )
-          ],
-        )
-      ],
-    );
-  }
-
   void _showDatePicker(BuildContext context) {
     showCupertinoModalPopup(
         context: context,
@@ -318,22 +268,5 @@ class _UploadPageState extends State<UploadPage> {
                 ],
               ),
             ));
-  }
-
-  _navigateAndDisplayImageSelectorPage(BuildContext context) async {
-    final result = await Navigator.push(
-      context,
-      MaterialPageRoute(
-        builder: (context) => BlocProvider(
-          create: (BuildContext context) => TeacherImageBloc(
-            storage: FirebaseStorage.instance,
-          )..add(TeacherImageStarted()),
-          child: ImageSelectionPage(),
-        ),
-      ),
-    );
-    setState(() {
-      _imageUrl = result;
-    });
   }
 }
