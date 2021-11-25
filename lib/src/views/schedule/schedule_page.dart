@@ -224,10 +224,10 @@ class SchedulePage extends StatelessWidget {
                   Container(
                     width: 80.0,
                     height: 80.0,
-                    decoration: (danceClass.teacher.teacherImageUrl != null)
+                    decoration: (danceClass.teacher.imageUrl != null)
                         ? BoxDecoration(
                             image: DecorationImage(
-                              image: NetworkImage(danceClass.teacher.teacherImageUrl!),
+                              image: NetworkImage(danceClass.teacher.imageUrl!),
                               fit: BoxFit.cover,
                             ),
                             borderRadius: BorderRadius.all(

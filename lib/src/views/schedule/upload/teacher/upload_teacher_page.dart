@@ -1,4 +1,3 @@
-import 'package:firebase_database/firebase_database.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -14,10 +13,6 @@ class UploadTeacherPage extends StatefulWidget {
 }
 
 class _UploadTeacherPageState extends State<UploadTeacherPage> {
-  final DatabaseReference _messagesRef =
-      FirebaseDatabase(databaseURL: 'https://moove-dance-studio-default-rtdb.europe-west1.firebasedatabase.app/')
-          .reference();
-
   String? _imageUrl;
 
   final _teacherNameController = TextEditingController();
@@ -25,51 +20,81 @@ class _UploadTeacherPageState extends State<UploadTeacherPage> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: CustomScrollView(
-        slivers: <Widget>[
-          AppHeader(
-            title: 'New Teacher',
+    return BlocConsumer<UploadTeacherBloc, UploadTeacherState>(listener: (context, state) {
+      if (state is UploadTeacherSuccess) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text('Teacher successfully uploaded.'),
           ),
-          SliverToBoxAdapter(
-              child: Material(
-            child: Container(
-              padding: const EdgeInsets.symmetric(
-                horizontal: SizeConstants.large,
-                vertical: SizeConstants.big,
-              ),
-              child: Column(
-                children: [
-                  _buildTeacherForm(),
-                  SizedBox(
-                    height: SizeConstants.big,
-                  ),
-                  Row(
-                    children: [
-                      Expanded(
-                        child: ElevatedButton(
-                          onPressed: () async {
-                            _messagesRef.child('Teacher').push().set(
-                                  Teacher(
+        );
+        Navigator.of(context).pop();
+      }
+      if (state is UploadTeacherFailure) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text('Failed to upload Teacher.'),
+          ),
+        );
+      }
+    }, builder: (context, state) {
+      if (state is UploadTeacherInProgress) {
+        return Container(
+          padding: const EdgeInsets.all(
+            SizeConstants.big,
+          ),
+          child: Center(
+            child: CircularProgressIndicator(),
+          ),
+        );
+      }
+      return Scaffold(
+        body: CustomScrollView(
+          slivers: <Widget>[
+            AppHeader(
+              title: 'New Teacher',
+            ),
+            SliverToBoxAdapter(
+                child: Material(
+              child: Container(
+                padding: const EdgeInsets.symmetric(
+                  horizontal: SizeConstants.large,
+                  vertical: SizeConstants.big,
+                ),
+                child: Column(
+                  children: [
+                    _buildTeacherForm(),
+                    SizedBox(
+                      height: SizeConstants.big,
+                    ),
+                    Row(
+                      children: [
+                        Expanded(
+                          child: ElevatedButton(
+                            onPressed: () async {
+                              BlocProvider.of<UploadTeacherBloc>(context).add(
+                                TeacherUploaded(
+                                  teacher: Teacher(
                                     teacherName: _teacherNameController.value.text,
-                                    teacherImageUrl: _imageUrl,
-                                  ).toJson(),
-                                );
-                          },
-                          child: Text(
-                            'Upload',
+                                    imageUrl: _imageUrl,
+                                  ),
+                                ),
+                              );
+                            },
+                            child: Text(
+                              'Upload',
+                            ),
                           ),
                         ),
-                      ),
-                    ],
-                  )
-                ],
+                      ],
+                    )
+                  ],
+                ),
               ),
-            ),
-          ))
-        ],
-      ),
-    );
+            ))
+          ],
+        ),
+      );
+    });
   }
 
   Widget _buildTeacherForm() {
@@ -140,10 +165,13 @@ class _UploadTeacherPageState extends State<UploadTeacherPage> {
       context,
       MaterialPageRoute(
         builder: (context) => BlocProvider(
-          create: (BuildContext context) => TeacherImageSelectionBloc(
+          create: (BuildContext context) => ImageSelectionBloc(
             storage: FirebaseStorage.instance,
-          )..add(TeacherImageSelectionStarted()),
-          child: ImageSelectionPage(),
+            reference: 'teacher',
+          )..add(ImageSelectionStarted()),
+          child: ImageSelectionPage(
+            reference: 'teacher',
+          ),
         ),
       ),
     );

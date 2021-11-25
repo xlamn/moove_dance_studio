@@ -97,7 +97,7 @@ class DanceClassPage extends StatelessWidget {
                 ),
                 child: Row(
                   children: [
-                    if (danceClass.teacher.teacherImageUrl != null)
+                    if (danceClass.teacher.imageUrl != null)
                       Padding(
                         padding: const EdgeInsets.only(
                           right: SizeConstants.big,
@@ -110,7 +110,7 @@ class DanceClassPage extends StatelessWidget {
                           height: 65.0,
                           decoration: BoxDecoration(
                             image: DecorationImage(
-                              image: NetworkImage(danceClass.teacher.teacherImageUrl!),
+                              image: NetworkImage(danceClass.teacher.imageUrl!),
                               fit: BoxFit.cover,
                             ),
                             borderRadius: BorderRadius.all(

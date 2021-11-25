@@ -1,4 +1,3 @@
-import 'package:flutter/widgets.dart';
 import 'package:json_annotation/json_annotation.dart';
 
 part 'teacher.g.dart';
@@ -7,12 +6,11 @@ part 'teacher.g.dart';
 class Teacher {
   final String teacherName;
 
-  final String? teacherImageUrl;
+  final String? imageUrl;
 
-  Teacher({required this.teacherName, this.teacherImageUrl});
+  Teacher({required this.teacherName, this.imageUrl});
 
-  factory Teacher.fromJson(Map<String, dynamic> json) =>
-      _$TeacherFromJson(json);
+  factory Teacher.fromJson(Map<String, dynamic> json) => _$TeacherFromJson(json);
 
   Map<String, dynamic> toJson() => _$TeacherToJson(this);
 }
