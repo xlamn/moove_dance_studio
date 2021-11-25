@@ -40,7 +40,7 @@ class NewsPostPage extends StatelessWidget {
                         alignment: WrapAlignment.start,
                         spacing: SizeConstants.small,
                         direction: Axis.horizontal,
-                        children: newsPost.tags),
+                        children: _buildTags(newsPost.tags)),
                     if (newsPost.tags.isNotEmpty)
                       SizedBox(
                         width: SizeConstants.small,
@@ -72,5 +72,16 @@ class NewsPostPage extends StatelessWidget {
         ),
       ),
     );
+  }
+
+  List<Widget> _buildTags(List<NewsPostTag> tags) {
+    final tagWidget = <Widget>[];
+    for (final tag in tags) {
+      tagWidget.add(Tag(
+        tagText: tag.text,
+        color: tag.color,
+      ));
+    }
+    return tagWidget;
   }
 }
