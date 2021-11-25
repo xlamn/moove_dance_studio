@@ -86,6 +86,11 @@ class _MyHomePageState extends State<MyHomePage> {
 
     return MultiBlocProvider(
       providers: [
+        BlocProvider<NewsPostBloc>(
+          create: (BuildContext context) => NewsPostBloc(
+            database: database,
+          )..add(NewsPostStarted()),
+        ),
         BlocProvider<DanceClassBloc>(
           create: (BuildContext context) => DanceClassBloc(
             database: database,

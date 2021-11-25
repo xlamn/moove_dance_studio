@@ -31,6 +31,8 @@ class DanceClassBloc extends Bloc<DanceClassEvent, DanceClassState> {
             )
             .toList();
 
+        filteredDanceClasses.sort((a, b) => a.time.compareTo(b.time));
+
         yield DanceClassFetchSuccess(danceClasses: filteredDanceClasses);
       } catch (_) {
         yield DanceClassFetchFailure();

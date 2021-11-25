@@ -4,6 +4,7 @@ import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:moove_dance_studio/moove_dance_studio.dart';
 import 'package:moove_dance_studio/src/constants/constants.dart';
+import 'package:timeago/timeago.dart' as timeago;
 
 import 'news/news.dart';
 
@@ -34,17 +35,70 @@ class NewsFeedPage extends StatelessWidget {
                 ),
               ),
             ),
-            SliverList(
-              delegate: SliverChildBuilderDelegate(
-                (BuildContext context, int index) {
-                  return _buildNewsPost(
-                    context: context,
-                    newsPost: testNews[index],
+            SliverToBoxAdapter(
+              child: BlocBuilder<NewsPostBloc, NewsPostState>(builder: (context, state) {
+                if (state is NewsPostFetchSuccess) {
+                  return state.newsPosts.isEmpty
+                      ? Container(
+                          padding: EdgeInsets.all(SizeConstants.large),
+                          child: Center(
+                            child: Text(
+                              'Seems like there are no news ...',
+                              style: TextStyle(
+                                fontSize: 16.0,
+                              ),
+                            ),
+                          ),
+                        )
+                      : Column(
+                          children: [
+                            for (var newsPost in state.newsPosts)
+                              _buildNewsPost(
+                                context: context,
+                                newsPost: newsPost,
+                              ),
+                          ],
+                        );
+                }
+                if (state is NewsPostFetchInProgress) {
+                  return Container(
+                    padding: EdgeInsets.all(SizeConstants.large),
+                    child: Center(
+                      child: Text(
+                        'Loading news ...',
+                        style: TextStyle(
+                          fontSize: 16.0,
+                        ),
+                      ),
+                    ),
                   );
-                },
-                childCount: testNews.length,
-              ),
-            ),
+                }
+                if (state is NewsPostFetchFailure) {
+                  return Container(
+                    padding: EdgeInsets.all(SizeConstants.large),
+                    child: Center(
+                      child: Text(
+                        'Something went wrong ...',
+                        style: TextStyle(
+                          fontSize: 16.0,
+                        ),
+                      ),
+                    ),
+                  );
+                }
+                return Container(
+                  padding: EdgeInsets.all(SizeConstants.large),
+                  child: Center(
+                    child: Text(
+                      'Nothing to show here ...',
+                      style: TextStyle(
+                        fontSize: 16.0,
+                      ),
+                    ),
+                  ),
+                );
+              }),
+            )
           ],
         ),
       ),
@@ -92,7 +146,7 @@ class NewsFeedPage extends StatelessWidget {
                               width: SizeConstants.small,
                             ),
                           Text(
-                            'vor 2 Std',
+                            timeago.format(newsPost.uploadDate),
                             style: TextStyle(
                               fontSize: 14.0,
                             ),
@@ -105,10 +159,17 @@ class NewsFeedPage extends StatelessWidget {
                 SizedBox(
                   width: SizeConstants.large,
                 ),
-                Placeholder(
-                  fallbackHeight: 75,
-                  fallbackWidth: 75,
-                )
+                if (newsPost.imageUrl != null)
+                  Container(
+                    width: 75.0,
+                    height: 75.0,
+                    decoration: BoxDecoration(
+                      image: DecorationImage(
+                        image: NetworkImage(newsPost.imageUrl!),
+                        fit: BoxFit.cover,
+                      ),
+                    ),
+                  ),
               ]),
             ),
             onTap: () {
@@ -135,61 +196,4 @@ class NewsFeedPage extends StatelessWidget {
     }
     return tagWidget;
   }
-
-  final testNews = [
-    NewsPost(
-      title: 'Neue Stundenpläne ab nächster Woche!',
-      tags: [
-        NewsPostTag(
-          text: 'Classes',
-          color: Colors.blue,
-        )
-      ],
-      uploadDate: DateTime.utc(2020, 11, 5),
-    ),
-    NewsPost(
-      title: 'Wir schließen vorübergehend wegen den Corona-Maßnahmen',
-      tags: [
-        NewsPostTag(
-          text: 'News',
-          color: Colors.orange,
-        ),
-        NewsPostTag(
-          text: 'WICHTIG',
-          color: Colors.red,
-        ),
-      ],
-      uploadDate: DateTime.utc(2020, 11, 3),
-    ),
-    NewsPost(
-      title: 'Online-Classes über unsere Instagram Seite',
-      tags: [
-        NewsPostTag(
-          text: 'Classes',
-          color: Colors.blue,
-        ),
-      ],
-      uploadDate: DateTime.utc(2020, 11, 1),
-    ),
-    NewsPost(
-      title: 'Neue Pullover und T-Shirts im Angebot! Schnell zugreifen!',
-      tags: [
-        NewsPostTag(
-          text: 'Merchandise',
-          color: Colors.green,
-        )
-      ],
-      uploadDate: DateTime.utc(2020, 10, 20),
-    ),
-    NewsPost(
-      title: 'Moove App geht in die Beta',
-      tags: [
-        NewsPostTag(
-          text: 'News',
-          color: Colors.orange,
-        ),
-      ],
-      uploadDate: DateTime.utc(2020, 9, 3),
-    ),
-  ].reversed.toList();
 }

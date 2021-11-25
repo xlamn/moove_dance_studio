@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:moove_dance_studio/moove_dance_studio.dart';
+import 'package:timeago/timeago.dart' as timeago;
 
 class NewsPostPage extends StatelessWidget {
   final NewsPost newsPost;
@@ -16,8 +17,8 @@ class NewsPostPage extends StatelessWidget {
       appBar: AppBar(),
       body: SingleChildScrollView(
         child: Container(
-          padding: EdgeInsets.symmetric(
-            horizontal: SizeConstants.big,
+          padding: EdgeInsets.all(
+            SizeConstants.large,
           ),
           child: Column(
             children: [
@@ -46,7 +47,7 @@ class NewsPostPage extends StatelessWidget {
                         width: SizeConstants.small,
                       ),
                     Text(
-                      'vor 2 Std',
+                      timeago.format(newsPost.uploadDate),
                       style: TextStyle(
                         fontSize: 14.0,
                       ),
@@ -54,17 +55,24 @@ class NewsPostPage extends StatelessWidget {
                   ],
                 ),
               ),
-              Container(
-                padding: EdgeInsets.symmetric(vertical: SizeConstants.small),
-                child: Placeholder(
-                  fallbackHeight: 200,
+              if (newsPost.imageUrl != null)
+                Container(
+                  margin: EdgeInsets.symmetric(vertical: SizeConstants.small),
+                  height: 200.0,
+                  decoration: BoxDecoration(
+                    image: DecorationImage(
+                      image: NetworkImage(newsPost.imageUrl!),
+                      fit: BoxFit.cover,
+                    ),
+                  ),
                 ),
-              ),
               Container(
                 padding: EdgeInsets.symmetric(vertical: SizeConstants.small),
                 child: Text(
-                  'Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industrys standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum. Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industrys standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.',
-                  style: TextStyle(height: 1.5),
+                  newsPost.content ?? '',
+                  style: TextStyle(
+                    height: 1.5,
+                  ),
                 ),
               ),
             ],
