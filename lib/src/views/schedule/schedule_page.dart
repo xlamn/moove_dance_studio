@@ -31,50 +31,7 @@ class SchedulePage extends StatelessWidget {
           slivers: <Widget>[
             AppHeader(
               title: 'Schedule',
-              action: () {
-                showCupertinoModalPopup(
-                    context: context,
-                    builder: (context) => CupertinoActionSheet(
-                          actions: [
-                            CupertinoActionSheetAction(
-                              onPressed: () => Navigator.pushReplacement(
-                                context,
-                                MaterialPageRoute(
-                                  builder: (context) => MultiBlocProvider(
-                                    providers: [
-                                      BlocProvider<TeacherSelectorBloc>(
-                                        create: (BuildContext context) => TeacherSelectorBloc(
-                                          database: FirebaseDatabase.instance,
-                                        )..add(
-                                            TeacherSelectorStarted(),
-                                          ),
-                                      ),
-                                      BlocProvider<UploadDanceClassBloc>(
-                                        create: (BuildContext context) => UploadDanceClassBloc(
-                                          database: FirebaseDatabase(
-                                              databaseURL:
-                                                  'https://moove-dance-studio-default-rtdb.europe-west1.firebasedatabase.app/'),
-                                        ),
-                                      ),
-                                    ],
-                                    child: UploadDanceClassPage(),
-                                  ),
-                                ),
-                              ),
-                              child: Text('Dance Class'),
-                            ),
-                            CupertinoActionSheetAction(
-                              onPressed: () => Navigator.pushReplacement(
-                                context,
-                                MaterialPageRoute(
-                                  builder: (context) => UploadTeacherPage(),
-                                ),
-                              ),
-                              child: Text('Teacher'),
-                            ),
-                          ],
-                        ));
-              },
+              action: () => showUploadActions(context),
             ),
             _buildWeekSelection(context),
             _buildDaySelection(context),
@@ -360,13 +317,55 @@ class SchedulePage extends StatelessWidget {
     );
   }
 
+  void showUploadActions(BuildContext context) {
+    showCupertinoModalPopup(
+        context: context,
+        builder: (context) => CupertinoActionSheet(
+              actions: [
+                CupertinoActionSheetAction(
+                  onPressed: () => Navigator.pushReplacement(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => MultiBlocProvider(
+                        providers: [
+                          BlocProvider<TeacherSelectorBloc>(
+                            create: (BuildContext context) => TeacherSelectorBloc(
+                              database: FirebaseDatabase.instance,
+                            )..add(
+                                TeacherSelectorStarted(),
+                              ),
+                          ),
+                          BlocProvider<UploadDanceClassBloc>(
+                            create: (BuildContext context) => UploadDanceClassBloc(
+                              database: FirebaseDatabase(databaseURL: Urls.retrieveDatabaseUrl()),
+                            ),
+                          ),
+                        ],
+                        child: UploadDanceClassPage(),
+                      ),
+                    ),
+                  ),
+                  child: Text('Dance Class'),
+                ),
+                CupertinoActionSheetAction(
+                  onPressed: () => Navigator.pushReplacement(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => BlocProvider<UploadTeacherBloc>(
+                        create: (BuildContext context) => UploadTeacherBloc(
+                          database: FirebaseDatabase(databaseURL: Urls.retrieveDatabaseUrl()),
+                        ),
+                        child: UploadTeacherPage(),
+                      ),
+                    ),
+                  ),
+                  child: Text('Teacher'),
+                ),
+              ],
+            ));
+  }
+
   String _getDanceClassTime(DanceClass danceClass) {
     return "${DateFormat.Hm().format(danceClass.time).toString()} - ${DateFormat.Hm().format(danceClass.time.add(Duration(minutes: danceClass.durationInMin))).toString()}";
   }
-
-  // Future<String> to64String() async {
-  //     ByteData bytes = await rootBundle.load('assets/coaches/tobi.jpg');
-  // var buffer = bytes.buffer;
-  // return base64Encode(Uint8List.view(buffer));
-  // }
 }
