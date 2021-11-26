@@ -15,7 +15,12 @@ class NewsFeedPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       child: RefreshIndicator(
-        onRefresh: () => Future.value(true),
+        onRefresh: () {
+          BlocProvider.of<NewsPostBloc>(context).add(
+            NewsPostFetched(),
+          );
+          return Future.value(true);
+        },
         edgeOffset: 220,
         child: CustomScrollView(
           slivers: <Widget>[

@@ -1,4 +1,5 @@
 export 'dance_class_bloc/dance_class_bloc.dart';
+export 'edit_dance_class_bloc/edit_dance_class_bloc.dart';
 export 'image_selection_bloc/image_selection_bloc.dart';
 export 'news_post_bloc/news_post_bloc.dart';
 export 'teacher_selector_bloc/teacher_selector_bloc.dart';

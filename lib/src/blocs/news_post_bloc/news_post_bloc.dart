@@ -14,7 +14,7 @@ class NewsPostBloc extends Bloc<NewsPostEvent, NewsPostState> {
 
   @override
   Stream<NewsPostState> mapEventToState(NewsPostEvent event) async* {
-    if (event is NewsPostStarted) {
+    if (event is NewsPostStarted || event is NewsPostFetched) {
       yield NewsPostFetchInProgress();
       try {
         List<NewsPost> newsPosts = [];

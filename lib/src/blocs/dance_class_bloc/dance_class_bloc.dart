@@ -44,9 +44,10 @@ class DanceClassBloc extends Bloc<DanceClassEvent, DanceClassState> {
         List<DanceClass> danceClasses = [];
         await databaseReference.once().then((DataSnapshot snapshot) {
           Map<dynamic, dynamic> values = snapshot.value;
-          values.forEach((key, values) {
-            danceClasses.add(DanceClass.fromJson(Map<String, dynamic>.from(values)));
-          });
+          if (values.isNotEmpty)
+            values.forEach((key, values) {
+              danceClasses.add(DanceClass.fromJson(Map<String, dynamic>.from(values)));
+            });
         }).timeout(Duration(seconds: 5));
 
         final filteredDanceClasses = danceClasses

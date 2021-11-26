@@ -298,8 +298,13 @@ class SchedulePage extends StatelessWidget {
               Navigator.push(
                 context,
                 MaterialPageRoute(
-                  builder: (context) => DanceClassPage(
-                    danceClass: danceClass,
+                  builder: (context) => BlocProvider<EditDanceClassBloc>(
+                    create: (BuildContext context) => EditDanceClassBloc(
+                      database: FirebaseDatabase(databaseURL: Urls.retrieveDatabaseUrl()),
+                    ),
+                    child: DanceClassPage(
+                      danceClass: danceClass,
+                    ),
                   ),
                 ),
               );
