@@ -1,7 +1,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.example.moove_dance_studio">
    <application
-        android:label="moove_dance_studio"
+        android:label="Moove"
         android:icon="@mipmap/ic_launcher">
         <activity
             android:name=".MainActivity"
